@@ -3,7 +3,7 @@ from main_block import *
 class Bomberman(Main_block):
 
     def __init__(self):
-        self.x, self.y = 7 * BLOCK_SIZE, 7 * BLOCK_SIZE
+        self.x, self.y = 1 * BLOCK_SIZE, 1 * BLOCK_SIZE
         super().__init__(self.x, self.y)
     """
     # TODO:
