@@ -12,11 +12,9 @@ class Main_block:
         self.width = BLOCK_SIZE
         self.height = BLOCK_SIZE
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.speed = 1
 
     def update(self, objects):
-        self.rect = self.rect.move(self.speed, 0)
-
+        pass
     def draw(self, surface):
         pygame.draw.rect(surface, RED, self.rect)
 

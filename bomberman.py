@@ -1,10 +1,9 @@
+from main_block import *
 
-import main_block
-
-class Bomberman(main_block.Main_block):
+class Bomberman(Main_block):
 
     def __init__(self):
-        self.x, self.y = 300, 300
+        self.x, self.y = 7 * BLOCK_SIZE, 7 * BLOCK_SIZE
         super().__init__(self.x, self.y)
     """
     # TODO:

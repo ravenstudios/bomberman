@@ -7,4 +7,5 @@ class Crate(main_block.Main_block):
 
 
     def draw(self, surface):
-        pygame.draw.rect(surface, (255, 0, 255), self.rect)
+        pygame.draw.rect(surface, (150,75,0), self.rect)
+        pygame.draw.rect(surface, (50,10,75), self.rect, 3)

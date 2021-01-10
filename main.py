@@ -1,14 +1,15 @@
 from constants import *
-import pygame, crate, bomberman
+import pygame, bomberman, map
 
 
 objects = []
 
-crate = crate.Crate(100, 100)
-bm = bomberman.Bomberman()
 
-objects.append(crate)
+bm = bomberman.Bomberman()
+map = map.Map()
+objects.append(map)
 objects.append(bm)
+
 
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
