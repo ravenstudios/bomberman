@@ -1,7 +1,14 @@
 from constants import *
-import pygame
+import pygame, main_block, bomberman
 
 
+objects = []
+
+main_block = main_block.Main_block()
+bm = bomberman.Bomberman()
+
+objects.append(main_block)
+objects.append(bm)
 
 clock = pygame.time.Clock()
 surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
@@ -17,6 +24,13 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+            if event.type == pygame.KEYDOWN:
+                keys = pygame.key.get_pressed()
+                if event.key == pygame.K_r:
+                    board.reset()
+                if event.key == pygame.K_q:
+                    running = False
         draw()
         update()
 
@@ -26,12 +40,17 @@ def main():
 
 def draw():
     surface.fill((0, 0, 0))#background
+
+    for obj in objects:
+        obj.draw(surface)
+
     pygame.display.flip()
 
 
 
 def update():
-    pass
+    for obj in objects:
+        obj.update(objects)
 
 
 
