@@ -1,13 +1,13 @@
 from constants import *
-import pygame, main_block, bomberman
+import pygame, crate, bomberman
 
 
 objects = []
 
-main_block = main_block.Main_block()
+crate = crate.Crate(100, 100)
 bm = bomberman.Bomberman()
 
-objects.append(main_block)
+objects.append(crate)
 objects.append(bm)
 
 clock = pygame.time.Clock()
@@ -22,7 +22,7 @@ def main():
     while running:
         clock.tick(TICK_RATE)
         for event in pygame.event.get():
-            
+
             if event.type == pygame.QUIT:
                 running = False
 
