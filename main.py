@@ -7,7 +7,7 @@ objects = []
 
 bm = bomberman.Bomberman()
 map = map.Map()
-objects.append(map)
+
 objects.append(bm)
 
 
@@ -43,6 +43,8 @@ def main():
 def draw():
     surface.fill((0, 0, 0))#background
 
+    map.draw(surface)
+
     for obj in objects:
         obj.draw(surface)
 
@@ -51,6 +53,8 @@ def draw():
 
 
 def update():
+    map.update(objects)
+    
     for obj in objects:
         obj.update(objects)
 
