@@ -9,10 +9,11 @@ bm = bomberman.Bomberman()
 map = map.Map()
 
 objects.append(bm)
+objects.append(map)
 
 
 clock = pygame.time.Clock()
-surface = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
+surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 pygame.init()
 
@@ -43,7 +44,6 @@ def main():
 def draw():
     surface.fill((0, 0, 0))#background
 
-    map.draw(surface)
 
     for obj in objects:
         obj.draw(surface)
@@ -53,8 +53,7 @@ def draw():
 
 
 def update():
-    map.update(objects)
-    
+
     for obj in objects:
         obj.update(objects)
 

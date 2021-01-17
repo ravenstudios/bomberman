@@ -1,37 +1,41 @@
-from main_block import *
 
+from main_block import *
+import map
 class Bomberman(Main_block):
 
     def __init__(self):
-        self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
+        mul = 0.75
+        self.x = self.y = BLOCK_SIZE + BLOCK_SIZE - (BLOCK_SIZE * mul)
 
         super().__init__(self.x, self.y)
-
+        self.width = self.height = BLOCK_SIZE * mul
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.speed = 6
-    """
-    # TODO:
-        move bm aka bomberman with W, A, S, D
-        and up down left right.
-        Dont worry about boundaries because we
-        will use unpassable blocks for that.
-    """
+
     def update(self, objects):
-        self.key_input()
-        # for obj in objects:
-        #     self.collide(obj.get_rect())
+        self.key_input(objects)
+        
 
-    def key_input(self):
+    def key_input(self, objects):
         keys = pygame.key.get_pressed()
+        map_objects = 0
 
-        if keys[pygame.K_s] or keys[pygame.K_DOWN] :
-            self.rect = self.rect.move(0, self.speed)
+        for obj in objects:
+            if isinstance(obj, map.Map):
+                map_objects = obj.get_blocks()
 
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
+            if not self.walk((0, self.speed), map_objects):
+                self.rect = self.rect.move(0, self.speed)
 
-        if keys[pygame.K_w] or keys[pygame.K_UP] :
-            self.rect = self.rect.move(0, -self.speed)
+        if (keys[pygame.K_w] or keys[pygame.K_UP]):
+            if not self.walk((0, -self.speed), map_objects):
+                self.rect = self.rect.move(0, -self.speed)
 
-        if keys[pygame.K_a] or keys[pygame.K_LEFT] :
-            self.rect = self.rect.move(-self.speed, 0)
+        if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
+            if not self.walk((-self.speed, 0), map_objects):
+                self.rect = self.rect.move(-self.speed, 0)
 
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT] :
-            self.rect = self.rect.move(self.speed, 0)
+        if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
+            if not self.walk((self.speed, 0), map_objects):
+                self.rect = self.rect.move(self.speed, 0)

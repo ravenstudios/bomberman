@@ -4,8 +4,10 @@ class Map:
 
     def __init__(self):
         self.blocks = []
-        self.top_limit = 0.40
-        self.bottom_limit = 0.30
+        # self.top_limit = 0.40
+        # self.bottom_limit = 0.30
+        self.top_limit = 0.20
+        self.bottom_limit = 0.10
         self.make_map()
 
 
@@ -25,7 +27,6 @@ class Map:
                     self.blocks.append(border_block.Border_block(c * BLOCK_SIZE, r * BLOCK_SIZE))
 
         ammount = random.randint(round((ROWS * COLS) * self.bottom_limit), round((ROWS * COLS) * self.top_limit))
-        print(ammount)
 
         while ammount > 0:
             x = random.randint(0, COLS)
@@ -34,3 +35,6 @@ class Map:
             if (x % 2 != 0 or y % 2 != 0) and x != 0 and x != COLS - 1 and y != 0 and y != ROWS -1:
                 self.blocks.append(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
                 ammount += -1
+
+    def get_blocks(self):
+        return self.blocks
