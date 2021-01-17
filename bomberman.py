@@ -3,9 +3,11 @@ from main_block import *
 class Bomberman(Main_block):
 
     def __init__(self):
-        self.x, self.y = 0, 0
+        self.x, self.y = BLOCK_SIZE, BLOCK_SIZE
 
         super().__init__(self.x, self.y)
+
+        self.speed = 6
     """
     # TODO:
         move bm aka bomberman with W, A, S, D
