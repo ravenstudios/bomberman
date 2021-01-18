@@ -8,8 +8,9 @@ objects = []
 bm = bomberman.Bomberman()
 map = map.Map()
 
-objects.append(bm)
+
 objects.append(map)
+objects.append(bm)
 
 
 clock = pygame.time.Clock()
@@ -27,6 +28,11 @@ def main():
 
             if event.type == pygame.QUIT:
                 running = False
+
+            if event.type == pygame.KEYUP :
+                if event.key == pygame.K_SPACE :
+                    bm.drop_bomb()
+
 
             if event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()

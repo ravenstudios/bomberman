@@ -12,6 +12,8 @@ class Bomberman(Main_block):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.speed = 6
         self.bombs = []
+        self.ammo = 100
+        self.fire_length = 5
 
     def update(self, objects):
         self.key_input(objects)
@@ -35,8 +37,7 @@ class Bomberman(Main_block):
             if isinstance(obj, map.Map):
                 map_objects = obj.get_blocks()
 
-        if keys[pygame.K_SPACE]:
-            self.bombs.append(bomb.Bomb(self.rect.x, self.rect.y))
+
 
         if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
             if not self.walk((0, self.speed), map_objects):
@@ -53,3 +54,9 @@ class Bomberman(Main_block):
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
             if not self.walk((self.speed, 0), map_objects):
                 self.rect = self.rect.move(self.speed, 0)
+
+
+    def drop_bomb(self):
+        if self.ammo > 0:
+            self.bombs.append(bomb.Bomb(self.rect.x, self.rect.y, self.fire_length))
+            self.ammo -= 1

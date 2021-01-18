@@ -30,5 +30,6 @@ class Main_block:
         r = self.rect.move(dir)
         for map_obj in map_objects:
             if r.colliderect(map_obj.get_rect()):
+                
                 return True
         return False
