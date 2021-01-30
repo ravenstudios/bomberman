@@ -26,15 +26,22 @@ class Map:
                 if r == 0 or r == ROWS - 1 or c == 0 or c == COLS - 1 or (c % 2 == 0 and r % 2 == 0):
                     self.blocks.append(border_block.Border_block(c * BLOCK_SIZE, r * BLOCK_SIZE))
 
-        # ammount = random.randint(round((ROWS * COLS) * self.bottom_limit), round((ROWS * COLS) * self.top_limit))
-        #
-        # while ammount > 0:
-        #     x = random.randint(0, COLS)
-        #     y = random.randint(0, ROWS)
-        #
-        #     if (x % 2 != 0 or y % 2 != 0) and x != 0 and x != COLS - 1 and y != 0 and y != ROWS -1:
-        #         self.blocks.append(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
-        #         ammount += -1
+        ammount = random.randint(round((ROWS * COLS) * self.bottom_limit), round((ROWS * COLS) * self.top_limit))
+
+        #crates
+        while ammount > 0:
+            x = random.randint(1, COLS - 1)
+            y = random.randint(1, ROWS - 1)
+
+            if (x % 2 != 0 or y % 2 != 0) and x != 0 and x != (COLS - 1) and y != 0 and y != (ROWS - 1):
+                self.blocks.append(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
+                ammount += -1
 
     def get_blocks(self):
         return self.blocks
+
+    def destroy_crate(self, id):
+        for b in self.blocks:
+            # print(id(b))
+            if id == b:
+                self.blocks.remove(b)

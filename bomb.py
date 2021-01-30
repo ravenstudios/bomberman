@@ -1,6 +1,6 @@
 from constants import *
 from main_block import *
-import pygame, main_block, map
+import pygame, main_block, map, crate
 
 class Bomb(main_block.Main_block):
 
@@ -46,10 +46,12 @@ class Bomb(main_block.Main_block):
         down = True
         left = True
 
-        map_objects = 0
+        map_obj = 0
+
         # gets all the block locations
         for obj in objects:
             if isinstance(obj, map.Map):
+                map_obj = obj
                 map_objects = obj.get_blocks()
 
 
@@ -57,43 +59,59 @@ class Bomb(main_block.Main_block):
 
             # up
             temp = (self.x, self.y - (bs * i))
-            if self.check_empty(temp, map_objects) and up:
+            obj = self.check_empty(temp, map_objects)
+            if obj and up:
                 self.fires.append(Fire(temp))
+                up = False
+                if isinstance(obj, crate.Crate):
+                    map_obj.destroy_crate(obj)
             else:
                 # stop adding fire in this direction
                 up = False
             # right
             temp = (self.x + (bs * i), self.y)
-            if self.check_empty(temp, map_objects) and right:
+            obj = self.check_empty(temp, map_objects)
+            if obj and right:
                 self.fires.append(Fire(temp))
+                right = False
+                if isinstance(obj, crate.Crate):
+                    map_obj.destroy_crate(obj)
             else:
                 # stop adding fire in this direction
                 right = False
             # down
             temp = (self.x, self.y + (bs * i))
-            if self.check_empty(temp, map_objects) and down:
+            obj = self.check_empty(temp, map_objects)
+            if obj and down:
                 self.fires.append(Fire(temp))
+                down = False
+                if isinstance(obj, crate.Crate):
+                    map_obj.destroy_crate(obj)
             else:
                 # stop adding fire in this direction
                 down = False
             # left
             temp = (self.x - (bs * i), self.y)
-            if self.check_empty(temp, map_objects) and left:
+            obj = self.check_empty(temp, map_objects)
+            if obj and left:
                 self.fires.append(Fire(temp))
+                left = False
+                if isinstance(obj, crate.Crate):
+                    map_obj.destroy_crate(obj)
             else:
                 # stop adding fire in this direction
                 left = False
-
-
-
 
     def check_empty(self, dir, map_objects):
         r = pygame.Rect(dir[0], dir[1], BLOCK_SIZE, BLOCK_SIZE)
         for map_obj in map_objects:
             if r.colliderect(map_obj.get_rect()):
                 return False
-        return True
+        return map_obj
 
+
+
+#######   FIRE   #######
 class Fire(main_block.Main_block):
     def __init__(self, dir):
         self.x = (dir[0] // BLOCK_SIZE) * BLOCK_SIZE
