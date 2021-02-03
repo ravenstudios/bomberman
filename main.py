@@ -1,21 +1,32 @@
 from constants import *
 import pygame, bomberman, map
 
+clock = pygame.time.Clock()
+surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+pygame.init()
+# pygame.joystick.init()
 
-objects = []
+# joystick_count = pygame.joystick.get_count()
+
+# for i in range(joystick_count):
+# if joystick_count:
+#
+#     joystick = pygame.joystick.Joystick(0)
+#     joystick.init()
+# joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+
+
 
 
 bm = bomberman.Bomberman()
 map = map.Map()
 
-objects.append(bm)
-objects.append(map)
+bmg = pygame.sprite.GroupSingle()
+bmg.add(bm)
 
 
-clock = pygame.time.Clock()
-surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
-pygame.init()
+
 
 
 def main():
@@ -24,16 +35,18 @@ def main():
     while running:
         clock.tick(TICK_RATE)
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 running = False
 
+            #Keyboard
             if event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()
                 if event.key == pygame.K_r:
                     board.reset()
                 if event.key == pygame.K_q:
                     running = False
+
+
         draw()
         update()
 
@@ -42,21 +55,16 @@ def main():
 
 
 def draw():
-    surface.fill((0, 0, 0))#background
-
-
-    for obj in objects:
-        obj.draw(surface)
-
+    surface.fill((100, 100, 100))#background
+    map.draw(surface)
+    bmg.draw(surface)
     pygame.display.flip()
 
 
-
 def update():
-
-    for obj in objects:
-        obj.update(objects)
-
+    map.update()
+    joystick = 0
+    bmg.update(joystick, map)
 
 
 if __name__ == "__main__":

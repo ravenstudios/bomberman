@@ -4,38 +4,58 @@ import map
 class Bomberman(Main_block):
 
     def __init__(self):
-        mul = 0.75
-        self.x = self.y = BLOCK_SIZE + BLOCK_SIZE - (BLOCK_SIZE * mul)
+        mul = 0.50
+        self.x, self.y = BLOCK_SIZE * mul, BLOCK_SIZE  * mul
 
-        super().__init__(self.x, self.y)
-        self.width = self.height = BLOCK_SIZE * mul
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        self.speed = 6
+        super().__init__(self.x + (BLOCK_SIZE - (BLOCK_SIZE * mul)), self.y + (BLOCK_SIZE - (BLOCK_SIZE * mul)), 320)
 
-    def update(self, objects):
-        self.key_input(objects)
-        
+        self.width = BLOCK_SIZE * mul
+        self.height = BLOCK_SIZE * mul
 
-    def key_input(self, objects):
+        self.speed = 4
+
+    def update(self, joystick, map):
+        self.input(joystick, map)
+        self.animate()
+
+
+
+    def input(self, joystick, map):
+        # x == 14
+        # get the pressed keys on keyboard
         keys = pygame.key.get_pressed()
-        map_objects = 0
 
-        for obj in objects:
-            if isinstance(obj, map.Map):
-                map_objects = obj.get_blocks()
+        # get pressed buttons on joypad
+        buttons = []
 
-        if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
-            if not self.walk((0, self.speed), map_objects):
-                self.rect = self.rect.move(0, self.speed)
+        if not joystick:
+            for i in range(20):
+                buttons.append(0)
+        else:
+            for i in range(joystick.get_numbuttons()):
+                buttons.append(joystick.get_button(i))
 
-        if (keys[pygame.K_w] or keys[pygame.K_UP]):
-            if not self.walk((0, -self.speed), map_objects):
+        map_objects = map.get_blocks()
+
+
+        # DOWN
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN] or buttons[6] == True):
+            self.rect = self.rect.move(0, self.speed)
+            if pygame.sprite.spritecollide(self, map_objects, False):
                 self.rect = self.rect.move(0, -self.speed)
 
-        if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
-            if not self.walk((-self.speed, 0), map_objects):
-                self.rect = self.rect.move(-self.speed, 0)
 
-        if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
-            if not self.walk((self.speed, 0), map_objects):
+        if (keys[pygame.K_w] or keys[pygame.K_UP] or buttons[4] == True):
+            self.rect = self.rect.move(0, -self.speed)
+            if pygame.sprite.spritecollide(self, map_objects, False):
+                self.rect = self.rect.move(0, self.speed)
+
+        if (keys[pygame.K_a] or keys[pygame.K_LEFT] or buttons[7] == True):
+            self.rect = self.rect.move(-self.speed, 0)
+            if pygame.sprite.spritecollide(self, map_objects, False):
                 self.rect = self.rect.move(self.speed, 0)
+
+        if (keys[pygame.K_d] or keys[pygame.K_RIGHT] or buttons[5] == True):
+            self.rect = self.rect.move(self.speed, 0)
+            if pygame.sprite.spritecollide(self, map_objects, False):
+                self.rect = self.rect.move(-self.speed, 0)
