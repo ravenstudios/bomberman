@@ -13,7 +13,7 @@ class Bomberman(Main_block):
         self.height = BLOCK_SIZE * mul
 
         self.speed = 4
-
+        self.animation_speed = self.speed * 0.01 * 2
     def update(self, joystick, map):
         self.input(joystick, map)
         self.animate()

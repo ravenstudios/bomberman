@@ -14,7 +14,7 @@ class Main_block(pygame.sprite.Sprite):
         self.frame = 0
         self.max_frame = 3
         self.animation_speed = 0.05
-        self.spritesheet = pygame.image.load(SPRITESHEET).convert()
+        self.spritesheet = pygame.image.load(SPRITESHEET)
         self.spritesheet_y = spritesheet_y
         self.image = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE))
         self.image = self.get_image_from_sprite_sheet(0, self.spritesheet_y)
@@ -27,9 +27,9 @@ class Main_block(pygame.sprite.Sprite):
 
 
     def get_image_from_sprite_sheet(self, row, col):
-        image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE]).convert()
+        image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
         image.blit(self.spritesheet, (0, 0), (row, col, BLOCK_SIZE, BLOCK_SIZE))
-        # image.set_colorkey(BLACK)
+        #image.set_colorkey()
         return image
 
 
