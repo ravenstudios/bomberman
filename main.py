@@ -1,8 +1,9 @@
 from constants import *
-import pygame, bomberman, map
+import sys, pygame, bomberman, map
 
 clock = pygame.time.Clock()
-surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen_size = pygame.FULLSCREEN
+surface = pygame.display.set_mode((0, 0), screen_size)
 pygame.init()
 # pygame.joystick.init()
 
@@ -17,12 +18,11 @@ pygame.init()
 
 
 
+bombs_group = 0
+bm = 0
+map_group = 0
+bmg = 0
 
-bm = bomberman.Bomberman()
-map = map.Map()
-
-bmg = pygame.sprite.GroupSingle()
-bmg.add(bm)
 
 
 
@@ -49,26 +49,47 @@ def main():
                     # Reset map
                     map.reset()
 
+            if event.type == pygame.KEYUP:
+                if event.key == 32:
+                    # updates the bomb group when you set a bomb
+
+                    bm.set_bomb(bombs_group)
+                    # print(bombs_groupx)
+                    # bombs_group = bombs_groupx
+                # keys = pygame.key.get_pressed()
+                #
+                # if event.key == pygame.K_q:
+                #     running = False
+
 
         draw()
         update()
 
     pygame.quit()
+    sys.exit()
 
 
 
 def draw():
     surface.fill((100, 100, 100))#background
-    map.draw(surface)
+    map_group.draw(surface)
+
+    bombs_group.draw(surface)
     bmg.draw(surface)
     pygame.display.flip()
 
 
 def update():
-    map.update()
+    map_group.update()
     joystick = 0
-    bmg.update(joystick, map)
+    bmg.update(joystick, map_group, surface)
+    bombs_group.update(bombs_group)
 
 
 if __name__ == "__main__":
+    bombs_group = pygame.sprite.Group()
+    bm = bomberman.Bomberman()
+    map_group = map.Map()
+    bmg = pygame.sprite.GroupSingle()
+    bmg.add(bm)
     main()

@@ -14,9 +14,11 @@ class Bomberman(Main_block):
         self.fire_length = 3
 
 
-    def update(self, joystick, map):
+
+    def update(self, joystick, map, surface):
         self.input(joystick, map)
         self.animate()
+
 
 
 
@@ -62,10 +64,11 @@ class Bomberman(Main_block):
             if pygame.sprite.spritecollide(self, map_objects, False):
                 self.rect = self.rect.move(-self.speed, 0)
 
-        # SPACE and "X" button 14
-        if keys[pygame.K_SPACE] or buttons[14]:
-            self.set_bomb()
+        # # SPACE and "X" button 14
+        # if keys[pygame.K_SPACE] or buttons[14]:
+        #     self.set_bomb()
 
 
-    def set_bomb(self):
-        print("bomb")
+    def set_bomb(self, bombs):
+        bombs.add(bomb.Bomb(self.rect.x, self.rect.y, self.fire_length))
+        
