@@ -41,10 +41,13 @@ def main():
             #Keyboard
             if event.type == pygame.KEYDOWN:
                 keys = pygame.key.get_pressed()
-                if event.key == pygame.K_r:
-                    board.reset()
+
                 if event.key == pygame.K_q:
                     running = False
+
+                if event.key == pygame.K_r:
+                    # Reset map
+                    map.reset()
 
 
         draw()

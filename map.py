@@ -34,8 +34,10 @@ class Map:
             y = random.randint(1, ROWS - 1)
 
             if (x % 2 != 0 or y % 2 != 0) and x != 0 and x != (COLS - 1) and y != 0 and y != (ROWS - 1):
-                self.blocks.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
-                ammount += -1
+                # Make sure no creates ant starting point
+                if (x != 0 and y != 0) and (x != 1 and y != 0) and (x != 0 and y != 1):
+                    self.blocks.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
+                    ammount += -1
 
     def get_blocks(self):
         return self.blocks
@@ -45,3 +47,7 @@ class Map:
     #         # print(id(b))
     #         if id == b:
     #             self.blocks.remove(b)
+
+    def reset(self):
+        self.blocks = pygame.sprite.Group()
+        self.make_map()
