@@ -15,14 +15,14 @@ class Bomberman(Main_block):
 
 
 
-    def update(self, joystick, map, surface):
-        self.input(joystick, map)
+    def update(self, joystick, map_group, surface):
+        self.input(joystick, map_group)
         self.animate()
 
 
 
 
-    def input(self, joystick, map):
+    def input(self, joystick, map_group):
         # x == 14
         # get the pressed keys on keyboard
         keys = pygame.key.get_pressed()
@@ -37,31 +37,31 @@ class Bomberman(Main_block):
             for i in range(joystick.get_numbuttons()):
                 buttons.append(joystick.get_button(i))
 
-        map_objects = map.get_blocks()
-
+        # # map_group = map.get_blocks()
+        # spritecollide(sprite, group, dokill)
 
         # DOWN
         if (keys[pygame.K_s] or keys[pygame.K_DOWN] or buttons[6]):
             self.rect = self.rect.move(0, self.speed)
-            if pygame.sprite.spritecollide(self, map_objects, False):
+            if pygame.sprite.spritecollide(self, map_group, False):
                 self.rect = self.rect.move(0, -self.speed)
 
         # UP
         if (keys[pygame.K_w] or keys[pygame.K_UP] or buttons[4]):
             self.rect = self.rect.move(0, -self.speed)
-            if pygame.sprite.spritecollide(self, map_objects, False):
+            if pygame.sprite.spritecollide(self, map_group, False):
                 self.rect = self.rect.move(0, self.speed)
 
         # LEFT
         if (keys[pygame.K_a] or keys[pygame.K_LEFT] or buttons[7]):
             self.rect = self.rect.move(-self.speed, 0)
-            if pygame.sprite.spritecollide(self, map_objects, False):
+            if pygame.sprite.spritecollide(self, map_group, False):
                 self.rect = self.rect.move(self.speed, 0)
 
         # RIGHT
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT] or buttons[5]):
             self.rect = self.rect.move(self.speed, 0)
-            if pygame.sprite.spritecollide(self, map_objects, False):
+            if pygame.sprite.spritecollide(self, map_group, False):
                 self.rect = self.rect.move(-self.speed, 0)
 
         # # SPACE and "X" button 14
@@ -69,6 +69,5 @@ class Bomberman(Main_block):
         #     self.set_bomb()
 
 
-    def set_bomb(self, bombs):
-        bombs.add(bomb.Bomb(self.rect.x, self.rect.y, self.fire_length))
-        
+    def set_bomb(self, bombs_group):
+        bombs_group.add(bomb.Bomb(self.rect.x, self.rect.y, self.fire_length))

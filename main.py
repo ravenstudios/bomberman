@@ -21,7 +21,7 @@ pygame.init()
 bombs_group = 0
 bm = 0
 map_group = 0
-bmg = 0
+bomberman_group = 0
 
 
 
@@ -74,22 +74,24 @@ def draw():
     surface.fill((100, 100, 100))#background
     map_group.draw(surface)
 
+
+    bomberman_group.draw(surface)
     bombs_group.draw(surface)
-    bmg.draw(surface)
     pygame.display.flip()
 
 
 def update():
     map_group.update()
     joystick = 0
-    bmg.update(joystick, map_group, surface)
-    bombs_group.update(bombs_group)
+    bomberman_group.update(joystick, map_group, surface)
+    bombs_group.update(bombs_group, map_group)
 
 
 if __name__ == "__main__":
     bombs_group = pygame.sprite.Group()
     bm = bomberman.Bomberman()
-    map_group = map.Map()
-    bmg = pygame.sprite.GroupSingle()
-    bmg.add(bm)
+    map_group = pygame.sprite.Group()
+    map.Map(map_group)
+    bomberman_group = pygame.sprite.GroupSingle()
+    bomberman_group.add(bm)
     main()
