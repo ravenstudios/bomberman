@@ -23,6 +23,7 @@ bm = 0
 map_group = 0
 crates_group = 0
 bomberman_group = 0
+all_group = 0
 
 
 
@@ -76,9 +77,8 @@ def draw():
 
 
 def update():
-    # map_group.update()
     joystick = 0
-    bomberman_group.update(joystick, map_group, crates_group, surface)
+    bomberman_group.update(joystick, all_group, map_group, crates_group, surface)
     bombs_group.update(map_group, crates_group, bombs_group)
     crates_group.update()
 
@@ -89,33 +89,12 @@ if __name__ == "__main__":
     bombs_group = pygame.sprite.Group()
     map_group = pygame.sprite.Group()
     crates_group = pygame.sprite.Group()
-
+    all_group = pygame.sprite.Group()
 
     bm = bomberman.Bomberman()
     m = map.Map(map_group)
     m.add_crates(crates_group)
-
-
+    all_group.add(map_group)
+    all_group.add(crates_group)
     bomberman_group.add(bm)
-
-
-
-
-
-
-
     main()
-
-
-
-# width = 20
-# height = 10
-# gap = 2
-#
-# rows = 5
-# cols = 5
-#
-# for r in rows:
-#
-#     for c in cols:
-#         group.add(new brick(r * width + gap, c * height  + gap))
