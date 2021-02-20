@@ -15,7 +15,7 @@ class Bomberman(Main_block):
 
 
 
-    def update(self, joystick, map_group, surface):
+    def update(self, joystick, map_group, crates_group, surface):
         self.input(joystick, map_group)
         self.animate()
 

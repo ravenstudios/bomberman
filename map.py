@@ -17,6 +17,11 @@ class Map:
                 if r == 0 or r == ROWS - 1 or c == 0 or c == COLS - 1 or (c % 2 == 0 and r % 2 == 0):
                     map_group.add(border_block.Border_block(c * BLOCK_SIZE, r * BLOCK_SIZE))
 
+
+
+    # def get_blocks(self):
+    #     return self.blocks
+    def add_crates(self, crates_group):
         ammount = random.randint(round((ROWS * COLS) * self.bottom_limit), round((ROWS * COLS) * self.top_limit))
 
         #crates
@@ -27,11 +32,9 @@ class Map:
             if (x % 2 != 0 or y % 2 != 0) and x != 0 and x != (COLS - 1) and y != 0 and y != (ROWS - 1):
                 # Make sure no creates ant starting point
                 if (x != 0 and y != 0) and (x != 1 and y != 0) and (x != 0 and y != 1):
-                    map_group.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
+                    crates_group.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
                     ammount += -1
 
-    # def get_blocks(self):
-    #     return self.blocks
 
 
     def reset(self):
