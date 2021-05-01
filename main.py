@@ -1,41 +1,21 @@
 from constants import *
-import sys, pygame, bomberman, map
-
-clock = pygame.time.Clock()
-screen_size = pygame.FULLSCREEN
-surface = pygame.display.set_mode((0, 0), screen_size)
-pygame.init()
-# pygame.joystick.init()
-
-# joystick_count = pygame.joystick.get_count()
-
-# for i in range(joystick_count):
-# if joystick_count:
-#
-#     joystick = pygame.joystick.Joystick(0)
-#     joystick.init()
-# joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-
-
-
-bombs_group = 0
-bm = 0
-map_group = 0
-crates_group = 0
-bomberman_group = 0
-all_group = 0
-
-
+import sys, pygame, states_manager
 
 
 
 
 
 def main():
+    sm = states_manager.States_manager()
+    clock = pygame.time.Clock()
+    screen_size = pygame.FULLSCREEN
+    surface = pygame.display.set_mode((0, 0), screen_size)
+    pygame.init()
+
     running = True
 
     while running:
-        clock.tick(TICK_RATE)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -47,54 +27,18 @@ def main():
                 if event.key == pygame.K_q:
                     running = False
 
-                if event.key == pygame.K_r:
-                    # Reset map
-                    map.reset()
+        clock.tick(TICK_RATE)
 
-            if event.type == pygame.KEYUP:
-                if event.key == 32:#SPACE
-                    # updates the bomb group when you set a bomb
+        sm.events()
+        sm.update(surface)
+        sm.draw(surface)
 
-                    bm.set_bomb(bombs_group)
-
-        draw()
-        update()
 
     pygame.quit()
     sys.exit()
 
 
 
-def draw():
-    surface.fill((100, 100, 100))#background
-    map_group.draw(surface)
-
-    bomberman_group.draw(surface)
-    bombs_group.draw(surface)
-    crates_group.draw(surface)
-
-    pygame.display.flip()
-
-
-def update():
-    joystick = 0
-    bomberman_group.update(joystick, all_group, map_group, crates_group, surface)
-    bombs_group.update(map_group, crates_group, bombs_group)
-    crates_group.update()
-
 
 if __name__ == "__main__":
-
-    bomberman_group = pygame.sprite.GroupSingle()
-    bombs_group = pygame.sprite.Group()
-    map_group = pygame.sprite.Group()
-    crates_group = pygame.sprite.Group()
-    all_group = pygame.sprite.Group()
-
-    bm = bomberman.Bomberman()
-    m = map.Map(map_group)
-    m.add_crates(crates_group)
-    all_group.add(map_group)
-    all_group.add(crates_group)
-    bomberman_group.add(bm)
     main()
