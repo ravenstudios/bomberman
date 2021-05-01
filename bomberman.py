@@ -15,7 +15,7 @@ class Bomberman(Main_block):
 
 
 
-    def update(self, joystick, all_group, map_group, crates_group, surface):
+    def update(self, joystick, all_group):
         self.input(joystick, all_group)
         self.animate()
 
@@ -26,6 +26,8 @@ class Bomberman(Main_block):
         # x == 14
         # get the pressed keys on keyboard
         keys = pygame.key.get_pressed()
+        # print("keys")
+        # print(pygame.K_s)
 
         # get pressed buttons on joypad
         buttons = []
@@ -42,6 +44,7 @@ class Bomberman(Main_block):
 
         # DOWN
         if (keys[pygame.K_s] or keys[pygame.K_DOWN] or buttons[6]):
+            print("down")
             # move
             self.rect = self.rect.move(0, self.speed)
             # gets all sprites that it collided with

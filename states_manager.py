@@ -27,16 +27,17 @@ class States_manager:
         self.m = map.Map(self.map_group)
         self.m.add_crates(self.crates_group)
         self.all_group.add(self.map_group)
+        self.all_group.add(self.bm)
         self.all_group.add(self.crates_group)
         self.bomberman_group.add(self.bm)
 
 
 
 
-    def events(self):
+    def events(self, events):
 
-
-        for event in pygame.event.get():
+        # print(events)
+        for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
 
@@ -71,6 +72,6 @@ class States_manager:
 
     def update(self, surface):
         joystick = 0
-        self.bomberman_group.update(joystick, self.all_group, self.map_group, self.crates_group, surface)
+        self.bomberman_group.update(joystick, self.all_group)
         self.bombs_group.update(self.map_group, self.crates_group, self.bombs_group)
         self.crates_group.update()

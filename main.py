@@ -29,7 +29,7 @@ def main():
 
         clock.tick(TICK_RATE)
 
-        sm.events()
+        sm.events(pygame.event.get())
         sm.update(surface)
         sm.draw(surface)
 
