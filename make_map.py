@@ -1,35 +1,29 @@
-f = open("map.map")
-# print(f.read())
-m = f.read()
-# print(m)
-f.close()
+class Make_map:
+    def __init__(self):
+        pass
 
-map_list = m.split("\n")
+    def get_list(self, file_path):
+        map_list = ""
+        # reads the file and splits every new line into a list
+        with open(file_path) as file:
+            map_list = file.read().split("\n")
+        # filter out all "#" and empty strings
+        map_list = list(filter(self.is_comment, map_list))
 
+        #finally split by csv
+        for m in range(len(map_list)):
+            map_list[m] = map_list[m].split(",")
 
-for m in range(len(map_list)):
-    temp = map_list[m].split(",")
-    map_list[m] = temp
+        return map_list
 
-for r in range(len(map_list)):
-    print(map_list[r])
-
-result = []
-
-for r in range(len(map_list)):
-    temp = []
-    for c in range(len(map_list[r])):
-
-        if map_list[r][c] == "0":
-            temp.append("S")
-        elif map_list[r][c] == "1":
-            temp.append("D")
-        elif map_list[r][c] == "2":
-            temp.append("G")
-        elif map_list[r][c] == "3":
-            temp.append("W")
-    result.append(temp)
+    # filters out comments and blank strings
+    def is_comment(self, string):
+        if not string:
+            return False
+        if string[0] == "#":
+            return False
+        return True
 
 
-for r in range(len(result)):
-    print(result[r])
+m = Make_map()
+print(m.get_list("map.map"))
