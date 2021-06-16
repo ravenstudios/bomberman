@@ -58,6 +58,7 @@ class Bomb(main_block.Main_block):
                             bombs_group.add(f)
 
                         for hc in hit_crates:
+                            bombs_group.add(f)
                             hc.remove()
 
 

@@ -17,7 +17,8 @@ def main():
 
     while running:
 
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.QUIT:
                 running = False
 
@@ -30,7 +31,7 @@ def main():
 
         clock.tick(TICK_RATE)
 
-        sm.events(pygame.event.get())
+        sm.events(events)
         sm.update(surface)
         sm.draw(surface)
 
