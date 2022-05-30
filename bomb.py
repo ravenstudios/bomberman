@@ -1,8 +1,8 @@
 from constants import *
-from main_block import *
-import pygame, main_block, map, crate
+from main_entity import *
+import pygame,  map, crate
 
-class Bomb(main_block.Main_block):
+class Bomb(Main_entity):
 
     def __init__(self, x, y, fire_length):
         self.x = (x // BLOCK_SIZE) * BLOCK_SIZE
@@ -24,7 +24,7 @@ class Bomb(main_block.Main_block):
 
     def detonate(self, map_group, crates_group, bombs_group, fire_length):
 
-        bs = BLOCK_SIZE
+        BS = BLOCK_SIZE
         dirs = [True, True, True, True] #bools for each direction
 
         # if fuse timer runs out:
@@ -36,10 +36,10 @@ class Bomb(main_block.Main_block):
 
                 # tup for the next fire location
                 dirs_tups = [
-                            (self.x, self.y - (bs * i)),
-                            (self.x + (bs * i), self.y),
-                            (self.x, self.y + (bs * i)),
-                            (self.x - (bs * i), self.y)
+                            (self.x, self.y - (BS * i)),
+                            (self.x + (BS * i), self.y),
+                            (self.x, self.y + (BS * i)),
+                            (self.x - (BS * i), self.y)
                             ]
 
                 for j in range(len(dirs_tups)):  # n, e, s, t
@@ -68,7 +68,7 @@ class Bomb(main_block.Main_block):
 
 
 #######   FIRE   #######
-class Fire(main_block.Main_block):
+class Fire(Main_entity):
     def __init__(self, coord):
         self.x, self.y = coord
 

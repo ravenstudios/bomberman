@@ -1,13 +1,13 @@
 from constants import *
 import pygame
 
-class Main_block(pygame.sprite.Sprite):
+class Main_entity(pygame.sprite.Sprite):
 
     """
         # TODO:
 
     """
-    def __init__(self, x, y, spritesheet_y):
+    def __init__(self, x, y, y_sprite_sheet_index):
         super().__init__()
         self.width = BLOCK_SIZE
         self.height = BLOCK_SIZE
@@ -15,9 +15,9 @@ class Main_block(pygame.sprite.Sprite):
         self.max_frame = 3
         self.animation_speed = 0.05
         self.spritesheet = pygame.image.load(SPRITESHEET)
-        self.spritesheet_y = spritesheet_y
+        self.y_sprite_sheet_index = y_sprite_sheet_index
         self.image = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE))
-        self.image = self.get_image_from_sprite_sheet(0, self.spritesheet_y)
+        self.image = self.get_image_from_sprite_sheet(0, self.y_sprite_sheet_index)
         self.rect = pygame.Rect(self.image.get_rect())
         self.rect.topleft = (x, y)
 
@@ -41,4 +41,4 @@ class Main_block(pygame.sprite.Sprite):
         if self.frame >= self.max_frame:
             self.frame = 0
 
-        self.image = self.get_image_from_sprite_sheet(round(self.frame) * BLOCK_SIZE, self.spritesheet_y)
+        self.image = self.get_image_from_sprite_sheet(round(self.frame) * BLOCK_SIZE, self.y_sprite_sheet_index)

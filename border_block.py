@@ -1,11 +1,9 @@
-from main_block import *
+from main_non_destroyable_block import *
 
-class Border_block(Main_block):
+class Border_block(Main_non_destroyable_block):
 
     def __init__(self, x, y):
-        super().__init__(x, y, 128)
+        super().__init__(x, y, 0)
 
-
-    # def draw(self, surface):
-    #     pygame.draw.rect(surface, (200, 200, 200), self.rect)
-    #     pygame.draw.rect(surface, (0, 100, 0), self.rect, 3)
+    def update(self):
+        self.animate()
