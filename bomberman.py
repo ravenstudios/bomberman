@@ -1,6 +1,8 @@
 
 from main_block import *
 import map, bomb
+
+
 class Bomberman(Main_block):
 
     def __init__(self):
