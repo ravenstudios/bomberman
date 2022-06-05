@@ -26,9 +26,8 @@ class States_manager:
         self.all_group = pygame.sprite.Group()
 
         self.player = player.Player()
-        self.m = map.Map(self.map_group)
-        print(self.map_group)
-        self.m.add_crates(self.crates_group)
+        self.map = map.Map(self.map_group)
+        self.map.add_crates(self.crates_group)
         self.all_group.add(self.map_group)
         self.all_group.add(self.border_blocks_group)
         self.all_group.add(self.crates_group)

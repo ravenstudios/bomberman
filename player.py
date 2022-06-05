@@ -15,9 +15,21 @@ class Player(Main_mob_entity):
     def update(self, joystick, all_group, bombs_group):
         self.input(joystick, all_group, bombs_group)
         self.move(all_group)
+        self.check_dir()
         self.animate()
 
 
+    def check_dir(self):
+        if self.direction.x > 0:
+            self.y_sprite_sheet_index = BLOCK_SIZE * 4;
+        if self.direction.x < 0:
+            self.y_sprite_sheet_index = BLOCK_SIZE * 5;
+        if self.direction.y < 0:
+            self.y_sprite_sheet_index = BLOCK_SIZE * 3;
+        if self.direction.y > 0:
+            self.y_sprite_sheet_index = BLOCK_SIZE * 2;
+        if self.direction == [0, 0]:
+            self.y_sprite_sheet_index = BLOCK_SIZE * 6;
 
     def input(self, joystick, all_group, bombs_group):
         # get the pressed keys on keyboard

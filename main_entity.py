@@ -14,7 +14,7 @@ class Main_entity(pygame.sprite.Sprite):
         self.frame = 0
         self.max_frame = 3
         self.animation_speed = 0.05
-        self.spritesheet = pygame.image.load(SPRITESHEET)
+        self.spritesheet = pygame.image.load(SPRITESHEET).convert()
         self.y_sprite_sheet_index = y_sprite_sheet_index
         self.image = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE))
         self.image = self.get_image_from_sprite_sheet(0, self.y_sprite_sheet_index)

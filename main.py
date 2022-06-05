@@ -7,12 +7,13 @@ import sys, pygame, states_manager
 
 
 def main():
-    sm = states_manager.States_manager()
+    pygame.init()
+
     clock = pygame.time.Clock()
     screen_size = pygame.FULLSCREEN
     surface = pygame.display.set_mode((0, 0), screen_size)
-    pygame.init()
 
+    sm = states_manager.States_manager()
     running = True
 
     while running:
