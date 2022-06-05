@@ -12,9 +12,9 @@ class Player(Main_mob_entity):
         self.fire_length = 3
 
 
-    def update(self, joystick, all_group, bombs_group):
-        self.input(joystick, all_group, bombs_group)
-        self.move(all_group)
+    def update(self, joystick, collideable_objects, bombs_group):
+        self.input(joystick,  bombs_group)
+        self.move(collideable_objects)
         self.check_dir()
         self.animate()
 
@@ -31,7 +31,7 @@ class Player(Main_mob_entity):
         if self.direction == [0, 0]:
             self.y_sprite_sheet_index = BLOCK_SIZE * 6;
 
-    def input(self, joystick, all_group, bombs_group):
+    def input(self, joystick, bombs_group):
         # get the pressed keys on keyboard
         keys = pygame.key.get_pressed()
         # get pressed buttons on joypad
@@ -80,9 +80,9 @@ class Player(Main_mob_entity):
 
 
 
-    def corner_assist(self, all_group):
+    def corner_assist(self, sprite_group):
         # if not center on a block move right or left to assist in going down if blocked
-        for object_hit in pygame.sprite.spritecollide(self, all_group, False):
+        for object_hit in pygame.sprite.spritecollide(self, sprite_group, False):
 
             if self.rect.center[0] < object_hit.rect.left and self.rect.right > object_hit.rect.left:
                 self.rect.x += -self.speed
