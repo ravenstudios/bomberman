@@ -15,14 +15,16 @@ class Bomb(Main_entity):
         self.fire_length = fire_length
         self.fires = []
 
-    def update(self, map_group, crates_group, bombs_group):
+    def update(self, main_group):
+        border_group = main_group.border_group
+        crates_group = main_group.crates_group
+        bombs_group = main_group.bombs_group
+
+        self.detonate(border_group, crates_group, bombs_group, self.fire_length)
 
 
-        self.detonate(map_group, crates_group, bombs_group, self.fire_length)
 
-
-
-    def detonate(self, map_group, crates_group, bombs_group, fire_length):
+    def detonate(self, border_group, crates_group, bombs_group, fire_length):
 
         BS = BLOCK_SIZE
         dirs = [True, True, True, True] #bools for each direction
@@ -48,7 +50,7 @@ class Bomb(Main_entity):
 
 
                         hit_crates = pygame.sprite.spritecollide(f, crates_group, False)
-                        hit_blocks = pygame.sprite.spritecollide(f, map_group, False)
+                        hit_blocks = pygame.sprite.spritecollide(f, border_group, False)
 
                         if hit_crates or hit_blocks:
                             dirs[j] = False
@@ -81,6 +83,9 @@ class Fire(Main_entity):
 
 
 
-    def update(self, map_group, crates_group, bombs_group):
+    def update(self, main_group):
+
+        bombs_group = main_group.bombs_group
+
         if pygame.time.get_ticks() - self.start >= self.life_span:
             bombs_group.remove(self)

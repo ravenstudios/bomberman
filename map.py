@@ -4,21 +4,19 @@ import convert_csv
 
 class Map:
 
-    def __init__(self, border_group, tile_group):
-        self.map = pygame.sprite.Group()
-        # self.top_limit = 0.40
-        # self.bottom_limit = 0.30
-        self.top_limit = 0.20
-        self.bottom_limit = 0.10
-        # self.map = self.make_map(border_group, tile_group)
+    def __init__(self, main_group):
         self.levels = ["level_0.csv", "level_1.csv"]
-        self.load_level(0, border_group, tile_group)
+        self.load_level(0, main_group)
 
 
 
-    def load_level(self, level, border_group, tile_group):
+
+    def load_level(self, level, main_group):
+        border_group = main_group.get_group("border_group")
+        floor_tiles_group = main_group.get_group("floor_tiles_group")
+
         border_group.empty()
-        tile_group.empty()
+        floor_tiles_group.empty()
 
         map_tiles = convert_csv.Convert_csv(self.levels[level]).get_list()
         for row in range(len(map_tiles)):
@@ -28,24 +26,45 @@ class Map:
                 if item == 0:
                     border_group.add(border_block.Border_block(col * BLOCK_SIZE, row * BLOCK_SIZE))
                 elif item == 7:
-                    tile_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 7 * BLOCK_SIZE))
+                    floor_tiles_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 7 * BLOCK_SIZE))
                 elif item == 8:
-                    tile_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 8 * BLOCK_SIZE))
+                    floor_tiles_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 8 * BLOCK_SIZE))
                 elif item == 9:
-                    tile_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 9 * BLOCK_SIZE))
+                    floor_tiles_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 9 * BLOCK_SIZE))
+
+        self.add_crates(main_group)
 
 
+    def add_crates(self, main_group):
+        bad_locations = [
+            (1, 1), (1, 2), (2, 1),
+            (12, 1), (13, 1), (13, 2),
+            (12, 9), (13, 9), (13, 8),
+            (1, 8), (1, 9), (2, 9)
+        ]
 
-    def add_crates(self, crates_group):
-        ammount = random.randint(round((ROWS * COLS) * self.bottom_limit), round((ROWS * COLS) * self.top_limit))
+        crates_group = main_group.get_group("crates_group")
+        floor_tiles_group = main_group.get_group("floor_tiles_group")
+        border_group = main_group.get_group("border_group")
 
-        #crates
+        groups = [crates_group, floor_tiles_group, border_group]
+
+
+        ammount = random.randint(round((ROWS * COLS) * CRATES_LOWER_LIMIT), round((ROWS * COLS) * CRATES_TOP_LIMIT))
+
         while ammount > 0:
-            x = random.randint(1, COLS - 1)
-            y = random.randint(1, ROWS - 1)
+            # print(crates_group)
+            x = random.randint(1, COLS - 2)
+            y = random.randint(1, ROWS - 2)
 
-            if (x % 2 != 0 or y % 2 != 0) and x != 0 and x != (COLS - 1) and y != 0 and y != (ROWS - 1):
-                # Make sure no creates ant starting point
-                if (x != 0 and y != 0) and (x != 1 and y != 0) and (x != 0 and y != 1):
-                    crates_group.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
-                    ammount += -1
+
+            if (x, y) not in bad_locations:
+                for group in groups:
+                    for sprite in group:
+                        if not sprite.rect.colliderect(pygame.Rect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)):
+                            crates_group.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
+                            ammount += -1
+                            break
+                    else:
+                        continue
+                    break
