@@ -1,6 +1,6 @@
 from constants import *
 from main_entity import *
-import map, bomb
+
 
 
 class Main_mob_entity(Main_entity):
