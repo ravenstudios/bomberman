@@ -11,8 +11,10 @@ def main():
 
     clock = pygame.time.Clock()
     screen_size = pygame.FULLSCREEN
-    surface = pygame.display.set_mode((0, 0), screen_size)
-
+    print(screen_size)
+    # screen_size = [ROWS * BLOCK_SIZE, COLS * BLOCK_SIZE]
+    # surface = pygame.display.set_mode((0, 0), screen_size)
+    surface = pygame.display.set_mode((COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE))
     sm = states_manager.States_manager()
     running = True
 

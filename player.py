@@ -12,9 +12,9 @@ class Player(Main_mob_entity):
         self.fire_length = 3
 
 
-    def update(self, joystick, collideable_objects, bombs_group):
-        self.input(joystick,  bombs_group)
-        self.move(collideable_objects)
+    def update(self, groups_manager):
+        self.input(groups_manager.get_group("bombs_group"))
+        self.move(groups_manager.get_group("collideable_objects"))
         self.check_dir()
         self.animate()
 
@@ -31,34 +31,27 @@ class Player(Main_mob_entity):
         if self.direction == [0, 0]:
             self.y_sprite_sheet_index = BLOCK_SIZE * 6;
 
-    def input(self, joystick, bombs_group):
+    def input(self, bombs_group):
         # get the pressed keys on keyboard
         keys = pygame.key.get_pressed()
         # get pressed buttons on joypad
-        buttons = []
 
-        if not joystick:
-            for i in range(20):
-                buttons.append(0)
-        else:
-            for i in range(joystick.get_numbuttons()):
-                buttons.append(joystick.get_button(i))
 
         # DOWN
-        if (keys[pygame.K_s] or keys[pygame.K_DOWN] or buttons[6]):
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
             self.direction.y = 1
 
         # UP
-        elif (keys[pygame.K_w] or keys[pygame.K_UP] or buttons[4]):
+        elif (keys[pygame.K_w] or keys[pygame.K_UP]):
             self.direction.y = -1
         else:
             self.direction.y = 0
 
         # LEFT
-        if (keys[pygame.K_a] or keys[pygame.K_LEFT] or buttons[7]):
+        if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
             self.direction.x = -1
         # RIGHT
-        elif (keys[pygame.K_d] or keys[pygame.K_RIGHT] or buttons[5]):
+        elif (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
             self.direction.x = 1
         else:
             self.direction.x = 0
