@@ -11,7 +11,7 @@ class Bomb(Main_entity):
         super().__init__(self.x, self.y, 3 * BLOCK_SIZE)
 
         self.start = pygame.time.get_ticks()
-        self.fuse = 1000
+        self.fuse = 2000
         self.fire_length = fire_length
         self.fires = []
 

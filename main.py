@@ -11,14 +11,15 @@ def main():
 
     clock = pygame.time.Clock()
     screen_size = pygame.FULLSCREEN
-    print(screen_size)
     # screen_size = [ROWS * BLOCK_SIZE, COLS * BLOCK_SIZE]
     # surface = pygame.display.set_mode((0, 0), screen_size)
     surface = pygame.display.set_mode((COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE))
-    sm = states_manager.States_manager()
+    states_manager_obj = states_manager.States_manager(clock)
+
     running = True
 
     while running:
+
 
         events = pygame.event.get()
         for event in events:
@@ -34,9 +35,13 @@ def main():
 
         clock.tick(TICK_RATE)
 
-        sm.events(events)
-        sm.update(surface)
-        sm.draw(surface)
+        pygame.display.set_caption(str(clock.get_fps()))
+
+        states_manager_obj.events(events)
+        states_manager_obj.update(surface)
+        states_manager_obj.draw(surface)
+
+
 
 
     pygame.quit()

@@ -1,6 +1,6 @@
 from constants import *
 from main_entity import *
-import map, bomb
+
 
 
 class Main_mob_entity(Main_entity):
@@ -18,19 +18,19 @@ class Main_mob_entity(Main_entity):
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.x > 0:
                         self.rect.right = sprite.rect.left
-                        return True
+                        return sprite
                     if self.direction.x < 0:
                         self.rect.left = sprite.rect.right
-                        return True
+                        return sprite
 
         if dir == "vertical":
             for sprite in sprite_group:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.y > 0:
-                        return True
+                        return sprite
                         self.rect.bottom = sprite.rect.top
                     if self.direction.y < 0:
-                        return True
+                        return sprite
                         self.rect.top = sprite.rect.bottom
 
 

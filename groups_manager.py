@@ -10,6 +10,7 @@ class Groups_manager:
         self.crates_group = pygame.sprite.Group()
         self.border_group = pygame.sprite.Group()
         self.floor_tiles_group = pygame.sprite.Group()
+        self.enemy_group = pygame.sprite.Group()
 
 
         self.player = player.Player()
@@ -34,6 +35,7 @@ class Groups_manager:
         self.crates_group.update()
         self.border_group.update()
         self.floor_tiles_group.update()
+        self.enemy_group.update(self)
 
 
 
@@ -45,7 +47,8 @@ class Groups_manager:
             self.floor_tiles_group,
             self.crates_group,
             self.bombs_group,
-            self.player_group
+            self.player_group,
+            self.enemy_group
         )
         return self.drawable_objects
 
@@ -61,5 +64,6 @@ class Groups_manager:
             "crates_group" : self.crates_group,
             "border_group" : self.border_group,
             "floor_tiles_group" : self.floor_tiles_group,
-            "collideable_objects" : self.collideable_objects
+            "collideable_objects" : self.collideable_objects,
+            "enemy_group" : self.enemy_group
         }
