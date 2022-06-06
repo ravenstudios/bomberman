@@ -35,7 +35,7 @@ class Groups_manager:
         self.crates_group.update()
         self.border_group.update()
         self.floor_tiles_group.update()
-        self.enemy_group.update()
+        self.enemy_group.update(self)
 
 
 

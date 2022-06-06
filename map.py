@@ -45,18 +45,13 @@ class Map:
             (1, 8), (1, 9), (2, 9)
         ]
 
-
-
         groups = [self.crates_group, self.floor_tiles_group, self.border_group]
-
-
         ammount = random.randint(round((ROWS * COLS) * CRATES_LOWER_LIMIT), round((ROWS * COLS) * CRATES_TOP_LIMIT))
 
         while ammount > 0:
             # print(self.crates_group)
             x = random.randint(1, COLS - 2)
             y = random.randint(1, ROWS - 2)
-
 
             if (x, y) not in bad_locations:
                 for group in groups:
@@ -68,6 +63,8 @@ class Map:
                     else:
                         continue
                     break
+
+
 
     def add_enemys(self):
         self.enemy_group.add(enemy_0.Enemy_0(13 * BLOCK_SIZE, 9 * BLOCK_SIZE, 6 * BLOCK_SIZE))

@@ -3,13 +3,14 @@ import sys, pygame, player, map, groups_manager
 
 
 class States_manager:
-    def __init__(self):
+    def __init__(self, clock):
         self.running = True
         self.states = ["start", "running", "paused", "dead"]
         self.state = self.states[1]
 
         self.groups_manager = groups_manager.Groups_manager()
         self.map = map.Map(self.groups_manager)
+
 
 
 
@@ -26,11 +27,14 @@ class States_manager:
 
 
         elif self.state == "paused":
-            surface.fill((255, 100, 100))#background
-
+            # surface.fill((255, 100, 100))#background
+            pass
 
         elif self.state == "dead":
             surface.fill((50, 50, 50))#background
+
+
+
 
         pygame.display.flip()
 
