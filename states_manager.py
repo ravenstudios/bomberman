@@ -45,7 +45,7 @@ class States_manager:
 
         elif self.state == "running":
             self.groups_manager.update()
-            self.groups_manager.player_group.update(self.groups_manager)
+            
 
 
         elif self.state == "paused":
@@ -73,7 +73,8 @@ class States_manager:
                     return True
                 if event.key == pygame.K_r:
                     # Reset map
-                    self.load_level(1)
+                    # self.groups_manager.enemy_group.reset()
+                    self.groups_manager.enemy_group.sprites()[0].reset()
                 if event.key == pygame.K_p:
                     if self.state == "paused":
                         self.state = "running"
