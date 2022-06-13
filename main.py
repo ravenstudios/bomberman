@@ -35,7 +35,7 @@ def main():
 
         clock.tick(TICK_RATE)
 
-        pygame.display.set_caption(str(clock.get_fps()))
+        # pygame.display.set_caption(str(clock.get_fps()))
 
         states_manager_obj.events(events)
         states_manager_obj.update(surface)

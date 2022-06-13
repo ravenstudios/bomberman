@@ -4,3 +4,4 @@ class Border_block(Main_non_destroyable_block):
 
     def __init__(self, x, y):
         super().__init__(x, y, 0)
+        self.animation_speed = 0

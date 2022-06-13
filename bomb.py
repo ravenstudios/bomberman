@@ -7,8 +7,8 @@ class Bomb(Main_entity):
     def __init__(self, x, y, fire_length):
         self.x = (x // BLOCK_SIZE) * BLOCK_SIZE
         self.y = (y // BLOCK_SIZE) * BLOCK_SIZE
-
-        super().__init__(self.x, self.y, 3 * BLOCK_SIZE)
+        y_sprite_sheet_index = 11 * BLOCK_SIZE
+        super().__init__(self.x, self.y, y_sprite_sheet_index)
 
         self.start = pygame.time.get_ticks()
         self.fuse = 2000
@@ -16,6 +16,7 @@ class Bomb(Main_entity):
         self.fires = []
 
     def update(self, main_group):
+        self.animate()
         border_group = main_group.border_group
         crates_group = main_group.crates_group
         bombs_group = main_group.bombs_group
@@ -73,8 +74,8 @@ class Bomb(Main_entity):
 class Fire(Main_entity):
     def __init__(self, coord):
         self.x, self.y = coord
-
-        super().__init__(self.x, self.y, 1 * BLOCK_SIZE)
+        y_sprite_sheet_index = 12 * BLOCK_SIZE
+        super().__init__(self.x, self.y, y_sprite_sheet_index)
 
         self.start = pygame.time.get_ticks()
         self.life_span = 300
@@ -84,7 +85,7 @@ class Fire(Main_entity):
 
 
     def update(self, main_group):
-
+        self.animate()
         bombs_group = main_group.bombs_group
 
         if pygame.time.get_ticks() - self.start >= self.life_span:
