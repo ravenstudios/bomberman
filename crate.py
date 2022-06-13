@@ -6,3 +6,4 @@ class Crate(Main_destroyable_block):
 
     def __init__(self, x, y):
         super().__init__(x, y, 64)
+        self.animation_speed = self.animation_speed / 2

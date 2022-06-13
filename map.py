@@ -1,5 +1,5 @@
 from constants import *
-import pygame, border_block, crate, random, floor_tile, enemy_0
+import pygame, border_block, crate, random, floor_tile, enemy_1
 import convert_csv
 
 class Map:
@@ -14,6 +14,7 @@ class Map:
 
         self.load_level(0, main_group)
         self.add_enemys()
+
     def load_level(self, level, main_group):
 
 
@@ -67,4 +68,4 @@ class Map:
 
 
     def add_enemys(self):
-        self.enemy_group.add(enemy_0.Enemy_0(13 * BLOCK_SIZE, 9 * BLOCK_SIZE, 6 * BLOCK_SIZE))
+        self.enemy_group.add(enemy_1.Enemy_1(13 * BLOCK_SIZE, 9 * BLOCK_SIZE))
