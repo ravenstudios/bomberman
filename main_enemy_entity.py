@@ -11,7 +11,7 @@ class Main_enemy_entity(Main_mob_entity):
         self.fire_length = 3
         self.set_bomb_timer = 0
         self.can_set_bomb = True
-        self.set_bomb_timer_max = 2000
+        self.set_bomb_timer_max = 2100
         self.hitbox = self.rect.inflate(-10, -10)
         self.states = ["search", "move", "bomb", "run"]
         self.state = self.states[0]
@@ -26,6 +26,7 @@ class Main_enemy_entity(Main_mob_entity):
 
         if pygame.time.get_ticks() >= self.set_bomb_timer + self.set_bomb_timer_max:
             self.can_set_bomb = True
+            self.state = "search"
 
         cap_str = "self.loc" + str((self.rect.x // 64, self.rect.y // 64)) + "self.goal_loc:" + str((self.goal_loc[0] // 64, self.goal_loc[1] // 64)) +  self.state
 
@@ -72,6 +73,7 @@ class Main_enemy_entity(Main_mob_entity):
 
 
     def move_to_location(self, location, collideable_objects):
+        # print(location)
         if self.rect.x == location.x and self.rect.y == location.y:
             self.state = "search"
         # horizontal
@@ -86,6 +88,9 @@ class Main_enemy_entity(Main_mob_entity):
             if self.can_set_bomb:
                 self.state = "bomb"
 
+        # elif isinstance(x_obj_hit, border_block.Border_block):
+        #     self.direction = self.random_direction()
+
 
         # vertical
         if self.rect.y > location.y:
@@ -95,10 +100,13 @@ class Main_enemy_entity(Main_mob_entity):
 
         self.rect.y += self.direction.y * self.speed
         y_obj_hit = self.check_collision(collideable_objects, "vertical")
+
         if isinstance(y_obj_hit, crate.Crate):
             if self.can_set_bomb:
                 self.state = "bomb"
-        
+        # elif isinstance(y_obj_hit, border_block.Border_block):
+        #     self.direction = self.random_direction()
+
 
 
 
@@ -112,15 +120,15 @@ class Main_enemy_entity(Main_mob_entity):
 
     def search_for_crate(self, crates_group):
         closest_crate_loc = 0
-        closest_crate_loc_vector = (0, 0)
+        closest_crate_loc_rect = self.rect
         self_loc = self.rect.x + self.rect.y
 
         for crate in crates_group:
             crate_loc = crate.rect.x + crate.rect.y
             if crate_loc < self_loc and crate_loc > closest_crate_loc:
                 closest_crate_loc = crate_loc
-                closest_crate_loc_vector = crate.rect
-        return closest_crate_loc_vector
+                closest_crate_loc_rect = crate.rect
+        return closest_crate_loc_rect
 
 
 
@@ -132,6 +140,8 @@ class Main_enemy_entity(Main_mob_entity):
 
 
     def random_direction(self):
-        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+        dirs = [(0, 1), (0, -1), (-1, 0), (1, 0)]
         r = random.randint(0, 3)
+        print("random dir", r)
         return pygame.math.Vector2(dirs[r])
