@@ -26,6 +26,7 @@ class Main_enemy_entity(Main_mob_entity):
 
         if pygame.time.get_ticks() >= self.set_bomb_timer + self.set_bomb_timer_max:
             self.can_set_bomb = True
+            self.state = "search"
 
         cap_str = "self.loc" + str((self.rect.x // 64, self.rect.y // 64)) + "self.goal_loc:" + str((self.goal_loc[0] // 64, self.goal_loc[1] // 64)) +  self.state
 
@@ -98,7 +99,7 @@ class Main_enemy_entity(Main_mob_entity):
         if isinstance(y_obj_hit, crate.Crate):
             if self.can_set_bomb:
                 self.state = "bomb"
-        
+
 
 
 

@@ -39,32 +39,57 @@ class Map:
 
 
     def add_crates(self, main_group):
-        bad_locations = [
+        player_locations = [
             (1, 1), (1, 2), (2, 1),
             (12, 1), (13, 1), (13, 2),
             (12, 9), (13, 9), (13, 8),
             (1, 8), (1, 9), (2, 9)
         ]
 
-        groups = [self.crates_group, self.floor_tiles_group, self.border_group]
+        groups = [self.crates_group,  self.border_group]
         ammount = random.randint(round((ROWS * COLS) * CRATES_LOWER_LIMIT), round((ROWS * COLS) * CRATES_TOP_LIMIT))
-
+        # print(self.floor_tiles_group.sprites())
         while ammount > 0:
-            # print(self.crates_group)
-            x = random.randint(1, COLS - 2)
-            y = random.randint(1, ROWS - 2)
+            # print("ammount:", ammount)
+            rand_crate_index = random.randint(0, len(self.floor_tiles_group) - 1)
+            # print(rand_crate_index)
+            x = self.floor_tiles_group.sprites()[rand_crate_index].rect.x
+            y = self.floor_tiles_group.sprites()[rand_crate_index].rect.y
 
-            if (x, y) not in bad_locations:
-                for group in groups:
-                    for sprite in group:
-                        if not sprite.rect.colliderect(pygame.Rect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)):
-                            self.crates_group.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
-                            ammount += -1
-                            break
-                    else:
-                        continue
-                    break
+            if (x // 64, y // 64) not in player_locations:
+                self.crates_group.add(crate.Crate(x, y))
+                ammount += -1
 
+
+
+
+
+
+
+            # self.crates_group.add(crate.)
+            # print("ammount:", ammount)
+            # # print(self.crates_group)
+            # x = random.randint(1, COLS - 2)
+            # y = random.randint(1, ROWS - 2)
+            #
+            # if (x, y) not in bad_locations:
+            #     print("x:", x, "y:", y)
+            #     for border in self.border_group:
+            #         # print(border.rect)
+            #         temp_rect = pygame.Rect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+            #         # print("temp", temp_rect)
+            #         if temp_rect.colliderect(border.rect):
+            #             print("jsdfjsddfsdfjsdfjsdfj")
+            #             print(border.rect)
+            #             continue
+            #         else:
+            #             self.crates_group.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
+            #             ammount += -1
+            #             continue
+            #
+            #         # break
+            # else:
+            #     print("bad x, y")
 
 
     def add_enemys(self):
