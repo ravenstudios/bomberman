@@ -35,7 +35,7 @@ class Map:
                 elif item == 9:
                     self.floor_tiles_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 9 * BLOCK_SIZE))
 
-        # self.add_crates(main_group)
+        self.add_crates(main_group)
 
 
     def add_crates(self, main_group):

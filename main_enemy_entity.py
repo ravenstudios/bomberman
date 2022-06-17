@@ -13,10 +13,12 @@ class Main_enemy_entity(Main_mob_entity):
         self.can_set_bomb = True
         self.set_bomb_timer_max = 2900
         self.hitbox = self.rect.inflate(-10, -10)
-        self.states = ["search", "move", "bomb", "run"]
+        self.states = ["search", "move", "bomb", "run", "wait"]
         self.state = self.states[0]
-        self.goal_loc = (8, 8)
+        self.goal_loc = (0, 0)
         self.path = []
+        self.wait_timer = 0
+        self.wait_time = 3000
         # goal 1: stay the fuck alive
         # goal 2: hunt for crate and blow that shit up
 
@@ -30,7 +32,7 @@ class Main_enemy_entity(Main_mob_entity):
             self.can_set_bomb = True
             # self.state = "search"
 
-        cap_str = "self.loc" + str((self.rect.x, self.rect.y)) + "self.goal_loc:" + str((self.goal_loc[0], self.goal_loc[1])) +  self.state
+        cap_str = "self.loc" + str((self.rect.x // 64, self.rect.y // 64)) + "self.goal_loc:" + str((self.goal_loc[0], self.goal_loc[1])) +  self.state
 
         pygame.display.set_caption(cap_str)
         crates_group = groups_manager.get_group("crates_group")
@@ -41,8 +43,8 @@ class Main_enemy_entity(Main_mob_entity):
         # self.search_for_crate(crates_group)
 
         if self.state == "search":
-            self.path = self.find_path((8, 8), collideable_objects)
-            print("search", self.path)
+            self.goal_loc = self.search_for_crate(crates_group)
+            self.path = self.find_path(collideable_objects)
             self.state = "move"
 
         if self.state == "move":
@@ -52,6 +54,10 @@ class Main_enemy_entity(Main_mob_entity):
         if self.state == "bomb":
             self.set_bomb(bombs_group)
 
+        if self.state == "wait":
+            if self.wait_timer + self.wait_time < pygame.time.get_ticks():
+                self.state = "search"
+
         # if self.state == "run":
         #     self.run(collideable_objects)
 
@@ -59,7 +65,7 @@ class Main_enemy_entity(Main_mob_entity):
         pass
 
 
-    def find_path(self, goal, collideable_objects):
+    def find_path(self, collideable_objects):
         # print("FIND PATH FUN")
         def is_obj_at_loc_collideable(loc):
             for obj in collideable_objects:
@@ -75,9 +81,11 @@ class Main_enemy_entity(Main_mob_entity):
         while queue:
 
             current = queue.pop(0)
+            # print("current", current)
+            # print("goal", self.goal_loc)
             visited_places.append(current)
-            if current == goal:
-                # print(visited_places)
+            if current == self.goal_loc:
+                print("vs", visited_places)
                 return visited_places
 
             dirs = [(0,-1), (1,0), (0,1), (-1,0)]
@@ -88,21 +96,23 @@ class Main_enemy_entity(Main_mob_entity):
                 loc = (x, y)
                 if not is_obj_at_loc_collideable(loc) and loc not in visited_places:
                     queue.insert(0, loc)
+                    if loc == self.goal_loc:
+                        return visited_places
 
 
 
 
     def move_to_location(self, collideable_objects):
-        goal_x = self.path[0][0] * BLOCK_SIZE
-        goal_y = self.path[0][1] * BLOCK_SIZE
+        goal_x = self.goal_loc[0] * BLOCK_SIZE
+        goal_y = self.goal_loc[1] * BLOCK_SIZE
 
         # ARRIVED AT LOCATION
         if self.rect.x == goal_x and self.rect.y == goal_y:
-            # self.state = "search"
+            self.state = "search"
 
-            self.path.pop(0)
-
-            self.goal_loc = self.path[0]
+            if self.path:
+                self.path.pop(0)
+                self.goal_loc = self.path[0]
             return
 
 
@@ -115,9 +125,9 @@ class Main_enemy_entity(Main_mob_entity):
 
         self.rect.x += self.direction.x * self.speed
         x_obj_hit = self.check_collision(collideable_objects, "horizontal")
-        # if isinstance(x_obj_hit, crate.Crate):
-        #     if self.can_set_bomb:
-        #         self.state = "bomb"
+        if isinstance(x_obj_hit, crate.Crate):
+            if self.can_set_bomb:
+                self.state = "bomb"
 
         # elif isinstance(x_obj_hit, border_block.Border_block):
         #     self.direction = self.random_direction()
@@ -132,9 +142,9 @@ class Main_enemy_entity(Main_mob_entity):
         self.rect.y += self.direction.y * self.speed
         y_obj_hit = self.check_collision(collideable_objects, "vertical")
 
-        # if isinstance(y_obj_hit, crate.Crate):
-        #     if self.can_set_bomb:
-        #         self.state = "bomb"
+        if isinstance(y_obj_hit, crate.Crate):
+            if self.can_set_bomb:
+                self.state = "bomb"
         # elif isinstance(y_obj_hit, border_block.Border_block):
         #     self.direction = self.random_direction()
 
@@ -145,7 +155,8 @@ class Main_enemy_entity(Main_mob_entity):
         bombs_group.add(bomb.Bomb(self.rect.x, self.rect.y, self.fire_length))
         self.set_bomb_timer = pygame.time.get_ticks()
         self.can_set_bomb = False
-        self.state = "run"
+        self.state = "wait"
+        self.wait_timer = pygame.time.get_ticks()
 
 
 
@@ -159,7 +170,7 @@ class Main_enemy_entity(Main_mob_entity):
             if crate_loc < self_loc and crate_loc > closest_crate_loc:
                 closest_crate_loc = crate_loc
                 closest_crate_loc_rect = crate.rect
-        return closest_crate_loc_rect
+        return (closest_crate_loc_rect.x // BLOCK_SIZE, closest_crate_loc_rect.y // BLOCK_SIZE)
 
 
 
