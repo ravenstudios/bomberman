@@ -33,14 +33,13 @@ class Main_enemy_entity(Main_mob_entity):
             # self.state = "search"
 
         cap_str = "self.loc" + str((self.rect.x // 64, self.rect.y // 64)) + "self.goal_loc:" + str((self.goal_loc[0], self.goal_loc[1])) +  self.state
-
         pygame.display.set_caption(cap_str)
+
         crates_group = groups_manager.get_group("crates_group")
         collideable_objects = groups_manager.get_group("collideable_objects")
         bombs_group = groups_manager.get_group("bombs_group")
         floor_tiles_group = groups_manager.get_group("floor_tiles_group")
         main_group = [collideable_objects, floor_tiles_group]
-        # self.search_for_crate(crates_group)
 
         if self.state == "search":
             self.goal_loc = self.search_for_crate(crates_group)
@@ -108,12 +107,14 @@ class Main_enemy_entity(Main_mob_entity):
 
         # ARRIVED AT LOCATION
         if self.rect.x == goal_x and self.rect.y == goal_y:
-            self.state = "search"
-
             if self.path:
                 self.path.pop(0)
-                self.goal_loc = self.path[0]
-            return
+                if self.path:
+                    self.goal_loc = self.path[0]
+            else:
+                if self.can_set_bomb:
+                    self.state = "bomb"
+        # return
 
 
 
@@ -129,8 +130,7 @@ class Main_enemy_entity(Main_mob_entity):
             if self.can_set_bomb:
                 self.state = "bomb"
 
-        # elif isinstance(x_obj_hit, border_block.Border_block):
-        #     self.direction = self.random_direction()
+
 
 
         # vertical
@@ -145,8 +145,7 @@ class Main_enemy_entity(Main_mob_entity):
         if isinstance(y_obj_hit, crate.Crate):
             if self.can_set_bomb:
                 self.state = "bomb"
-        # elif isinstance(y_obj_hit, border_block.Border_block):
-        #     self.direction = self.random_direction()
+
 
 
 
@@ -161,16 +160,35 @@ class Main_enemy_entity(Main_mob_entity):
 
 
     def search_for_crate(self, crates_group):
-        closest_crate_loc = 0
-        closest_crate_loc_rect = self.rect
-        self_loc = self.rect.x + self.rect.y
+
+    # pos = pygame.math.Vector2(self.x, self.y)
+    # enemy = min([e for e in enemies], key=lambda e: pos.distance_to(pygame.math.Vector2(e.x, e.y)))
+
+        closest_crate_loc = 10000
+        closest_crate_loc_rect = pygame.math.Vector2(0, 0)
+        self_loc = pygame.math.Vector2(self.rect.x, self.rect.y)
 
         for crate in crates_group:
-            crate_loc = crate.rect.x + crate.rect.y
-            if crate_loc < self_loc and crate_loc > closest_crate_loc:
-                closest_crate_loc = crate_loc
+            crate_loc = pygame.math.Vector2(crate.rect.x, crate.rect.y)
+            if crate_loc.distance_to(self_loc) < closest_crate_loc:
+                closest_crate_loc = crate_loc.distance_to(self_loc)
                 closest_crate_loc_rect = crate.rect
-        return (closest_crate_loc_rect.x // BLOCK_SIZE, closest_crate_loc_rect.y // BLOCK_SIZE)
+
+        result_loc = (closest_crate_loc_rect.x // 64, closest_crate_loc_rect.y // 64)
+        print("result:", result_loc)
+        if self.rect.x > closest_crate_loc_rect.x:#right
+            print(((closest_crate_loc_rect.x // 64) + 1, (closest_crate_loc_rect.y // 64)))
+            return ((closest_crate_loc_rect.x // 64) + 1, (closest_crate_loc_rect.y // 64))
+        if self.rect.x < closest_crate_loc_rect.x:#left
+            print(((closest_crate_loc_rect.x // 64) - 1, (closest_crate_loc_rect.y // 64)))
+            return ((closest_crate_loc_rect.x // 64) - 1, (closest_crate_loc_rect.y // 64))
+        if self.rect.y > closest_crate_loc_rect.y:#down
+            print(((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) + 1))
+            return ((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) + 1)
+        if self.rect.y < closest_crate_loc_rect.y:#up
+            print(((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) - 1))
+            return ((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) - 1)
+
 
 
 
@@ -186,15 +204,3 @@ class Main_enemy_entity(Main_mob_entity):
         dirs = [(0, 1), (0, -1), (-1, 0), (1, 0)]
         r = random.randint(0, 3)
         return pygame.math.Vector2(dirs[r])
-
-
-
-class Path_finding:
-    def __init__(self, entity, map):
-        self.map = map
-        self.rect = entity.rect
-        self.x = self.rect.x // 64
-        self.y = self.y.rect // 64
-
-    def find_path(self):
-        pass
