@@ -84,7 +84,7 @@ class Main_enemy_entity(Main_mob_entity):
             # print("goal", self.goal_loc)
             visited_places.append(current)
             if current == self.goal_loc:
-                print("vs", visited_places)
+                # print("vs", visited_places)
                 return visited_places
 
             dirs = [(0,-1), (1,0), (0,1), (-1,0)]
@@ -111,9 +111,10 @@ class Main_enemy_entity(Main_mob_entity):
                 self.path.pop(0)
                 if self.path:
                     self.goal_loc = self.path[0]
-            else:
-                if self.can_set_bomb:
-                    self.state = "bomb"
+                else:
+                    if self.can_set_bomb:
+                        self.state = "bomb"
+
         # return
 
 
@@ -126,9 +127,9 @@ class Main_enemy_entity(Main_mob_entity):
 
         self.rect.x += self.direction.x * self.speed
         x_obj_hit = self.check_collision(collideable_objects, "horizontal")
-        if isinstance(x_obj_hit, crate.Crate):
-            if self.can_set_bomb:
-                self.state = "bomb"
+        # if isinstance(x_obj_hit, crate.Crate):
+        #     if self.can_set_bomb:
+        #         self.state = "bomb"
 
 
 
@@ -142,9 +143,9 @@ class Main_enemy_entity(Main_mob_entity):
         self.rect.y += self.direction.y * self.speed
         y_obj_hit = self.check_collision(collideable_objects, "vertical")
 
-        if isinstance(y_obj_hit, crate.Crate):
-            if self.can_set_bomb:
-                self.state = "bomb"
+        # if isinstance(y_obj_hit, crate.Crate):
+        #     if self.can_set_bomb:
+        #         self.state = "bomb"
 
 
 
@@ -167,14 +168,17 @@ class Main_enemy_entity(Main_mob_entity):
         closest_crate_loc = 10000
         closest_crate_loc_rect = pygame.math.Vector2(0, 0)
         self_loc = pygame.math.Vector2(self.rect.x, self.rect.y)
+        closest_crate = 0
 
         for crate in crates_group:
             crate_loc = pygame.math.Vector2(crate.rect.x, crate.rect.y)
             if crate_loc.distance_to(self_loc) < closest_crate_loc:
                 closest_crate_loc = crate_loc.distance_to(self_loc)
                 closest_crate_loc_rect = crate.rect
+                closest_crate = crate
 
         result_loc = (closest_crate_loc_rect.x // 64, closest_crate_loc_rect.y // 64)
+        crate.highlight()
         print("result:", result_loc)
         if self.rect.x > closest_crate_loc_rect.x:#right
             print(((closest_crate_loc_rect.x // 64) + 1, (closest_crate_loc_rect.y // 64)))
