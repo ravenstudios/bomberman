@@ -14,7 +14,7 @@ def main():
     # screen_size = [ROWS * BLOCK_SIZE, COLS * BLOCK_SIZE]
     # surface = pygame.display.set_mode((0, 0), screen_size)
     surface = pygame.display.set_mode((COLS * BLOCK_SIZE, ROWS * BLOCK_SIZE))
-    states_manager_obj = states_manager.States_manager(clock)
+    states_manager_obj = states_manager.States_manager(clock, surface)
 
     running = True
 
@@ -40,7 +40,6 @@ def main():
         states_manager_obj.events(events)
         states_manager_obj.update(surface)
         states_manager_obj.draw(surface)
-
 
 
 

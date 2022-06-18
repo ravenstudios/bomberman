@@ -1,7 +1,6 @@
 from constants import *
 from main_mob_entity import *
 import random, crate, bomb, border_block
-
 class Main_enemy_entity(Main_mob_entity):
 
     def __init__(self, x, y, y_sprite_sheet_index):
@@ -24,9 +23,7 @@ class Main_enemy_entity(Main_mob_entity):
 
 
     def update(self, groups_manager):
-
         self.animate()
-
 
         if pygame.time.get_ticks() >= self.set_bomb_timer + self.set_bomb_timer_max:
             self.can_set_bomb = True
@@ -78,7 +75,6 @@ class Main_enemy_entity(Main_mob_entity):
         queue.insert(0, self.get_coords())
 
         while queue:
-
             current = queue.pop(0)
             # print("current", current)
             # print("goal", self.goal_loc)
@@ -115,10 +111,6 @@ class Main_enemy_entity(Main_mob_entity):
                     if self.can_set_bomb:
                         self.state = "bomb"
 
-        # return
-
-
-
         # horizontal
         if self.rect.x > goal_x:
             self.direction = pygame.math.Vector2(-1, 0)
@@ -130,8 +122,6 @@ class Main_enemy_entity(Main_mob_entity):
         # if isinstance(x_obj_hit, crate.Crate):
         #     if self.can_set_bomb:
         #         self.state = "bomb"
-
-
 
 
         # vertical
@@ -178,7 +168,7 @@ class Main_enemy_entity(Main_mob_entity):
                 closest_crate = crate
 
         result_loc = (closest_crate_loc_rect.x // 64, closest_crate_loc_rect.y // 64)
-        crate.highlight()
+        closest_crate.highlight()
         print("result:", result_loc)
         if self.rect.x > closest_crate_loc_rect.x:#right
             print(((closest_crate_loc_rect.x // 64) + 1, (closest_crate_loc_rect.y // 64)))
