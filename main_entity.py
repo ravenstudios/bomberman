@@ -12,12 +12,7 @@ class Main_entity(pygame.sprite.Sprite):
         self.width = BLOCK_SIZE
         self.height = BLOCK_SIZE
 
-
-
-
-        # self.animation_speed = 0.12
         self.spritesheet = pygame.image.load(SPRITESHEET).convert()
-
         self.y_sprite_sheet_index = y_sprite_sheet_index
 
         self.image = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE))
@@ -25,11 +20,11 @@ class Main_entity(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.image.get_rect()).inflate(-10, -10)
         self.rect.topleft = (x, y)
 
-
         self.frame = 0
         self.max_frame = (self.spritesheet.get_width() // BLOCK_SIZE) - 1
         self.animation_speed = TICK_RATE / self.max_frame / 100
 
+        self.coords = (self.rect.x // 64, self.rect.y // 64)
 
 
 
@@ -53,3 +48,7 @@ class Main_entity(pygame.sprite.Sprite):
             self.frame = 0
 
         self.image = self.get_image_from_sprite_sheet(round(self.frame) * BLOCK_SIZE, self.y_sprite_sheet_index)
+
+
+    def get_coords(self):
+        return self.coords

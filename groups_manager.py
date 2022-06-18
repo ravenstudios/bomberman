@@ -55,6 +55,9 @@ class Groups_manager:
     def get_group(self, search):
         return self.main_group[search]
 
+    def get_main_group(self):
+        return self.main_group
+
 
 
     def update_main_group(self):
