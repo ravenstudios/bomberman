@@ -15,6 +15,7 @@ class States_manager:
 
 
 
+
     def draw(self, surface):
         surface.fill((100, 100, 100))#background
 
@@ -33,7 +34,7 @@ class States_manager:
             surface.fill((50, 50, 50))#background
 
 
-
+        
         pygame.display.flip()
 
 

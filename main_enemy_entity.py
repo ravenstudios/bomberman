@@ -119,9 +119,9 @@ class Main_enemy_entity(Main_mob_entity):
 
         self.rect.x += self.direction.x * self.speed
         x_obj_hit = self.check_collision(collideable_objects, "horizontal")
-        # if isinstance(x_obj_hit, crate.Crate):
-        #     if self.can_set_bomb:
-        #         self.state = "bomb"
+        if isinstance(x_obj_hit, crate.Crate):
+            if self.can_set_bomb:
+                self.state = "bomb"
 
 
         # vertical
@@ -133,9 +133,9 @@ class Main_enemy_entity(Main_mob_entity):
         self.rect.y += self.direction.y * self.speed
         y_obj_hit = self.check_collision(collideable_objects, "vertical")
 
-        # if isinstance(y_obj_hit, crate.Crate):
-        #     if self.can_set_bomb:
-        #         self.state = "bomb"
+        if isinstance(y_obj_hit, crate.Crate):
+            if self.can_set_bomb:
+                self.state = "bomb"
 
 
 

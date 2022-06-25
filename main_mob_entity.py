@@ -23,7 +23,7 @@ class Main_mob_entity(Main_entity):
                         self.rect.left = sprite.rect.right
                         return sprite
 
-        if dir == "vertical":
+        elif dir == "vertical":
             for sprite in sprite_group:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.y > 0:
@@ -34,4 +34,5 @@ class Main_mob_entity(Main_entity):
                         self.rect.top = sprite.rect.bottom
 
 
-        return False
+        else:
+            raise ValueError("Must use \"horizontal\" or \"vertical\"")
