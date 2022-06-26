@@ -1,6 +1,7 @@
 from constants import *
 from main_mob_entity import *
-import random, crate, bomb, border_block
+import random, bomb
+
 class Main_enemy_entity(Main_mob_entity):
 
     def __init__(self, x, y, y_sprite_sheet_index):
@@ -29,7 +30,7 @@ class Main_enemy_entity(Main_mob_entity):
             self.can_set_bomb = True
             # self.state = "search"
 
-        cap_str = "self.loc" + str((self.rect.x // 64, self.rect.y // 64)) + "self.goal_loc:" + str((self.goal_loc[0], self.goal_loc[1])) +  self.state
+        cap_str = "self.loc" + str((self.rect.x // BLOCK_SIZE, self.rect.y // BLOCK_SIZE)) + "self.goal_loc:" + str((self.goal_loc[0], self.goal_loc[1])) +  self.state
         pygame.display.set_caption(cap_str)
 
         crates_group = groups_manager.get_group("crates_group")
@@ -60,14 +61,15 @@ class Main_enemy_entity(Main_mob_entity):
     def run(self):
         pass
 
+    def is_obj_at_loc_collideable(self, loc, collideable_objects):
+        for obj in collideable_objects:
+            if (obj.rect.x // BLOCK_SIZE, obj.rect.y // BLOCK_SIZE) == loc:
+                return True
+        return False
 
     def find_path(self, collideable_objects):
         # print("FIND PATH FUN")
-        def is_obj_at_loc_collideable(loc):
-            for obj in collideable_objects:
-                if (obj.rect.x // 64, obj.rect.y // 64) == loc:
-                    return True
-            return False
+
 
 
         visited_places = []
@@ -89,7 +91,7 @@ class Main_enemy_entity(Main_mob_entity):
                 x = current[0] + d[0]
                 y = current[1] + d[1]
                 loc = (x, y)
-                if not is_obj_at_loc_collideable(loc) and loc not in visited_places:
+                if not self.is_obj_at_loc_collideable(loc, collideable_objects) and loc not in visited_places:
                     queue.insert(0, loc)
                     if loc == self.goal_loc:
                         return visited_places
@@ -119,9 +121,9 @@ class Main_enemy_entity(Main_mob_entity):
 
         self.rect.x += self.direction.x * self.speed
         x_obj_hit = self.check_collision(collideable_objects, "horizontal")
-        if isinstance(x_obj_hit, crate.Crate):
-            if self.can_set_bomb:
-                self.state = "bomb"
+        # if isinstance(x_obj_hit, crate.Crate):
+        #     if self.can_set_bomb:
+        #         self.state = "bomb"
 
 
         # vertical
@@ -133,9 +135,9 @@ class Main_enemy_entity(Main_mob_entity):
         self.rect.y += self.direction.y * self.speed
         y_obj_hit = self.check_collision(collideable_objects, "vertical")
 
-        if isinstance(y_obj_hit, crate.Crate):
-            if self.can_set_bomb:
-                self.state = "bomb"
+        # if isinstance(y_obj_hit, crate.Crate):
+        #     if self.can_set_bomb:
+        #         self.state = "bomb"
 
 
 
@@ -167,21 +169,21 @@ class Main_enemy_entity(Main_mob_entity):
                 closest_crate_loc_rect = crate.rect
                 closest_crate = crate
 
-        result_loc = (closest_crate_loc_rect.x // 64, closest_crate_loc_rect.y // 64)
+        result_loc = (closest_crate_loc_rect.x // BLOCK_SIZE, closest_crate_loc_rect.y // BLOCK_SIZE)
         closest_crate.highlight()
         print("result:", result_loc)
         if self.rect.x > closest_crate_loc_rect.x:#right
-            print(((closest_crate_loc_rect.x // 64) + 1, (closest_crate_loc_rect.y // 64)))
-            return ((closest_crate_loc_rect.x // 64) + 1, (closest_crate_loc_rect.y // 64))
+            print(((closest_crate_loc_rect.x // BLOCK_SIZE) + 1, (closest_crate_loc_rect.y // BLOCK_SIZE)))
+            return ((closest_crate_loc_rect.x // BLOCK_SIZE) + 1, (closest_crate_loc_rect.y // BLOCK_SIZE))
         if self.rect.x < closest_crate_loc_rect.x:#left
-            print(((closest_crate_loc_rect.x // 64) - 1, (closest_crate_loc_rect.y // 64)))
-            return ((closest_crate_loc_rect.x // 64) - 1, (closest_crate_loc_rect.y // 64))
+            print(((closest_crate_loc_rect.x // BLOCK_SIZE) - 1, (closest_crate_loc_rect.y // BLOCK_SIZE)))
+            return ((closest_crate_loc_rect.x // BLOCK_SIZE) - 1, (closest_crate_loc_rect.y // BLOCK_SIZE))
         if self.rect.y > closest_crate_loc_rect.y:#down
-            print(((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) + 1))
-            return ((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) + 1)
+            print(((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) + 1))
+            return ((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) + 1)
         if self.rect.y < closest_crate_loc_rect.y:#up
-            print(((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) - 1))
-            return ((closest_crate_loc_rect.x // 64), (closest_crate_loc_rect.y // 64) - 1)
+            print(((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) - 1))
+            return ((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) - 1)
 
 
 

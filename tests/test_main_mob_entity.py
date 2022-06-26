@@ -6,7 +6,7 @@ sys.path.append(parentdir)
 
 import main_mob_entity,
 
-class Main_mob_entity_tests(unittest.TestCase):
+class Test_main_mob_entity(unittest.TestCase):
 
     def setUp(self):
         pygame.init()
@@ -19,7 +19,6 @@ class Main_mob_entity_tests(unittest.TestCase):
 
 
     def test_check_collision(self):
-        print(self.test_obj0)
         self.assertRaises(ValueError, self.test_obj0.check_collision, self.test_group, "not_vertical")
         self.assertRaises(ValueError, self.test_obj0.check_collision, self.test_group, "not_horizontal")
 

@@ -1,6 +1,6 @@
 from constants import *
 from main_entity import *
-import pygame,  map, crate
+import pygame
 
 class Bomb(Main_entity):
 

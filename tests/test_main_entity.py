@@ -6,7 +6,7 @@ sys.path.append(parentdir)
 
 import main_entity
 
-class Main_entity_tests(unittest.TestCase):
+class Test_main_entity(unittest.TestCase):
 
     def setUp(self):
         pygame.init()

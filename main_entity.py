@@ -34,9 +34,9 @@ class Main_entity(pygame.sprite.Sprite):
 
 
     def get_image_from_sprite_sheet(self, row, col):
-        if row < 0 or row > self.spritesheet.get_height():
+        if row < 0 or row > self.spritesheet.get_width():
             raise ValueError("row is either below 0 or larger than spritesheet")
-        if col < 0 or col > self.spritesheet.get_width():
+        if col < 0 or col > self.spritesheet.get_height():
             raise ValueError("col is either below 0 or larger than spritesheet")
 
         image = pygame.Surface([BLOCK_SIZE, BLOCK_SIZE])
