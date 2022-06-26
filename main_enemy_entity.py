@@ -65,7 +65,7 @@ class Main_enemy_entity(Main_mob_entity):
 
     def is_obj_at_loc_collideable(self, loc, collideable_objects):
         for obj in collideable_objects:
-            if (obj.rect.x // BLOCK_SIZE, obj.rect.y // BLOCK_SIZE) == loc:
+            if (obj.rect.x, obj.rect.y) == loc:
                 return True
         return False
 
@@ -79,17 +79,18 @@ class Main_enemy_entity(Main_mob_entity):
 
         while queue:
             current = queue.pop(0)
+            # print(f"current: {current} goal_loc:{self.goal_loc}")
             visited_places.append(current)
             if current == self.goal_loc:
                 return visited_places
 
-            dirs = [(0,-1), (1,0), (0,1), (-1,0)]
+            dirs = [vec2(0,-BLOCK_SIZE), vec2(BLOCK_SIZE,0), vec2(0,BLOCK_SIZE), vec2(-BLOCK_SIZE,0)]
 
             for d in dirs:
-                x = current[0] + d[0]
-                y = current[1] + d[1]
-
-                if x >= 0 and y >= 0 and x <= COLS and y <= ROWS:
+                x = current[0] + d.x
+                y = current[1] + d.y
+                # print(f"x:{x} y:{y}")
+                if x >= 0 and y >= 0 and x <= COLS * BLOCK_SIZE and y <= ROWS * BLOCK_SIZE:
                     loc = (x, y)
 
                 if not self.is_obj_at_loc_collideable(loc, collideable_objects) and loc not in visited_places:
@@ -103,6 +104,7 @@ class Main_enemy_entity(Main_mob_entity):
         goal_y = goal[1] * BLOCK_SIZE
         x, y = self.get_coords()
         # ARRIVED AT LOCATION
+        print(f"goal_x:{goal_x} goal_y:{goal_y} x:{x} y:{y}")
         if x == goal_x and y == goal_y:
             if self.path:
                 self.path.pop(0)

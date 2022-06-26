@@ -24,7 +24,7 @@ class Main_entity(pygame.sprite.Sprite):
         self.max_frame = (self.spritesheet.get_width() // BLOCK_SIZE) - 1
         self.animation_speed = TICK_RATE / self.max_frame / 100
 
-        self.coords = (self.rect.x // BLOCK_SIZE, self.rect.y // BLOCK_SIZE)
+        self.coords = (self.rect.x, self.rect.y)
 
 
 

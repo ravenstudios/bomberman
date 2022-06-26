@@ -52,9 +52,9 @@ class Map:
         while ammount > 0:
             # print("ammount:", ammount)
             rand_crate_index = random.randint(0, len(self.floor_tiles_group) - 1)
-            # print(rand_crate_index)
-            x = self.floor_tiles_group.sprites()[rand_crate_index].rect.x
-            y = self.floor_tiles_group.sprites()[rand_crate_index].rect.y
+
+            x = self.floor_tiles_group.sprites()[rand_crate_index].rect.x // BLOCK_SIZE
+            y = self.floor_tiles_group.sprites()[rand_crate_index].rect.y // BLOCK_SIZE
 
             if (x, y) not in player_locations:
                 self.crates_group.add(crate.Crate(x, y))
