@@ -18,13 +18,13 @@ class Main_entity(pygame.sprite.Sprite):
         self.image = pygame.Surface((BLOCK_SIZE, BLOCK_SIZE))
         self.image = self.get_image_from_sprite_sheet(0, self.y_sprite_sheet_index)
         self.rect = pygame.Rect(self.image.get_rect()).inflate(-10, -10)
-        self.rect.topleft = (x, y)
+        self.rect.topleft = (x * BLOCK_SIZE, y * BLOCK_SIZE)
 
         self.frame = 0
         self.max_frame = (self.spritesheet.get_width() // BLOCK_SIZE) - 1
         self.animation_speed = TICK_RATE / self.max_frame / 100
 
-        self.coords = (self.rect.x // 64, self.rect.y // 64)
+        self.coords = (self.rect.x // BLOCK_SIZE, self.rect.y // BLOCK_SIZE)
 
 
 
@@ -34,6 +34,7 @@ class Main_entity(pygame.sprite.Sprite):
 
 
     def get_image_from_sprite_sheet(self, row, col):
+        # print(f"self:{self} row:{row} col:{col} self.y_sprite_sheet_index:{self.y_sprite_sheet_index}")
         if row < 0 or row > self.spritesheet.get_width():
             raise ValueError("row is either below 0 or larger than spritesheet")
         if col < 0 or col > self.spritesheet.get_height():
@@ -52,7 +53,7 @@ class Main_entity(pygame.sprite.Sprite):
         if self.frame > self.max_frame:
             self.frame = 0
 
-        self.image = self.get_image_from_sprite_sheet(round(self.frame) * BLOCK_SIZE, self.y_sprite_sheet_index)
+        self.image = self.get_image_from_sprite_sheet(round(self.frame) * BLOCK_SIZE, self.y_sprite_sheet_index * BLOCK_SIZE)
 
 
     def get_coords(self):

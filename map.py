@@ -27,13 +27,13 @@ class Map:
             for col in range(len(map_tiles[row])):
                 item = int(map_tiles[row][col]) // SPRITESHEET_NUM_OF_COLS
                 if item == 0:
-                    self.border_group.add(border_block.Border_block(col * BLOCK_SIZE, row * BLOCK_SIZE))
+                    self.border_group.add(border_block.Border_block(col, row, 0))
                 elif item == 7:
-                    self.floor_tiles_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 7 * BLOCK_SIZE))
+                    self.floor_tiles_group.add(floor_tile.Floor_tile(col, row, 7))
                 elif item == 8:
-                    self.floor_tiles_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 8 * BLOCK_SIZE))
+                    self.floor_tiles_group.add(floor_tile.Floor_tile(col, row, 8))
                 elif item == 9:
-                    self.floor_tiles_group.add(floor_tile.Floor_tile(col * BLOCK_SIZE, row * BLOCK_SIZE, 9 * BLOCK_SIZE))
+                    self.floor_tiles_group.add(floor_tile.Floor_tile(col, row, 9))
 
         self.add_crates(main_group)
 
@@ -56,7 +56,7 @@ class Map:
             x = self.floor_tiles_group.sprites()[rand_crate_index].rect.x
             y = self.floor_tiles_group.sprites()[rand_crate_index].rect.y
 
-            if (x // 64, y // 64) not in player_locations:
+            if (x, y) not in player_locations:
                 self.crates_group.add(crate.Crate(x, y))
                 ammount += -1
 
@@ -76,14 +76,14 @@ class Map:
             #     print("x:", x, "y:", y)
             #     for border in self.border_group:
             #         # print(border.rect)
-            #         temp_rect = pygame.Rect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+            #         temp_rect = pygame.Rect(x, y, BLOCK_SIZE, BLOCK_SIZE)
             #         # print("temp", temp_rect)
             #         if temp_rect.colliderect(border.rect):
             #             print("jsdfjsddfsdfjsdfjsdfj")
             #             print(border.rect)
             #             continue
             #         else:
-            #             self.crates_group.add(crate.Crate(x * BLOCK_SIZE, y * BLOCK_SIZE))
+            #             self.crates_group.add(crate.Crate(x, y))
             #             ammount += -1
             #             continue
             #
@@ -93,4 +93,4 @@ class Map:
 
 
     def add_enemys(self):
-        self.enemy_group.add(enemy_1.Enemy_1(13 * BLOCK_SIZE, 9 * BLOCK_SIZE))
+        self.enemy_group.add(enemy_1.Enemy_1(13, 9))

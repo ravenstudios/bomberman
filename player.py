@@ -6,7 +6,7 @@ import map, bomb
 class Player(Main_mob_entity):
 
     def __init__(self):
-        super().__init__(BLOCK_SIZE, BLOCK_SIZE, 320)
+        super().__init__(1, 1, 5)
         self.speed = 4
         self.animation_speed = 0.08
         self.fire_length = 3
@@ -21,15 +21,15 @@ class Player(Main_mob_entity):
 
     def check_dir(self):
         if self.direction.x > 0:
-            self.y_sprite_sheet_index = BLOCK_SIZE * 4;
+            self.y_sprite_sheet_index = 4;
         if self.direction.x < 0:
-            self.y_sprite_sheet_index = BLOCK_SIZE * 5;
+            self.y_sprite_sheet_index = 5;
         if self.direction.y < 0:
-            self.y_sprite_sheet_index = BLOCK_SIZE * 3;
+            self.y_sprite_sheet_index = 3;
         if self.direction.y > 0:
-            self.y_sprite_sheet_index = BLOCK_SIZE * 2;
+            self.y_sprite_sheet_index = 2;
         if self.direction == [0, 0]:
-            self.y_sprite_sheet_index = BLOCK_SIZE * 6;
+            self.y_sprite_sheet_index = 6;
 
     def input(self, bombs_group):
         # get the pressed keys on keyboard

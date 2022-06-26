@@ -1,6 +1,7 @@
 from constants import *
 from main_mob_entity import *
 import random, bomb
+vec2 = pygame.math.Vector2
 
 class Main_enemy_entity(Main_mob_entity):
 
@@ -45,8 +46,8 @@ class Main_enemy_entity(Main_mob_entity):
             self.state = "move"
 
         if self.state == "move":
-            self.move_to_location(collideable_objects)
-
+            self.move_to_location(self.goal_loc, collideable_objects)
+            self.move(collideable_objects)
 
         if self.state == "bomb":
             self.set_bomb(bombs_group)
@@ -61,16 +62,16 @@ class Main_enemy_entity(Main_mob_entity):
     def run(self):
         pass
 
+
     def is_obj_at_loc_collideable(self, loc, collideable_objects):
         for obj in collideable_objects:
             if (obj.rect.x // BLOCK_SIZE, obj.rect.y // BLOCK_SIZE) == loc:
                 return True
         return False
 
+
+
     def find_path(self, collideable_objects):
-        # print("FIND PATH FUN")
-
-
 
         visited_places = []
         queue = []
@@ -78,11 +79,8 @@ class Main_enemy_entity(Main_mob_entity):
 
         while queue:
             current = queue.pop(0)
-            # print("current", current)
-            # print("goal", self.goal_loc)
             visited_places.append(current)
             if current == self.goal_loc:
-                # print("vs", visited_places)
                 return visited_places
 
             dirs = [(0,-1), (1,0), (0,1), (-1,0)]
@@ -90,47 +88,47 @@ class Main_enemy_entity(Main_mob_entity):
             for d in dirs:
                 x = current[0] + d[0]
                 y = current[1] + d[1]
-                loc = (x, y)
+
+                if x >= 0 and y >= 0 and x <= COLS and y <= ROWS:
+                    loc = (x, y)
+
                 if not self.is_obj_at_loc_collideable(loc, collideable_objects) and loc not in visited_places:
                     queue.insert(0, loc)
                     if loc == self.goal_loc:
                         return visited_places
 
 
-
-
-    def move_to_location(self, collideable_objects):
-        goal_x = self.goal_loc[0] * BLOCK_SIZE
-        goal_y = self.goal_loc[1] * BLOCK_SIZE
-
+    def move_to_location(self, goal, collideable_objects):
+        goal_x = goal[0] * BLOCK_SIZE
+        goal_y = goal[1] * BLOCK_SIZE
+        x, y = self.get_coords()
         # ARRIVED AT LOCATION
-        if self.rect.x == goal_x and self.rect.y == goal_y:
+        if x == goal_x and y == goal_y:
             if self.path:
                 self.path.pop(0)
                 if self.path:
                     self.goal_loc = self.path[0]
-                else:
-                    if self.can_set_bomb:
-                        self.state = "bomb"
+            else:
+                if self.can_set_bomb:
+                    self.state = "bomb"
+                    return "bomb" #used for unittest
 
-        # horizontal
-        if self.rect.x > goal_x:
-            self.direction = pygame.math.Vector2(-1, 0)
-        elif self.rect.x < goal_x:
-            self.direction = pygame.math.Vector2(1, 0)
+        xdir = self.goal_loc[0] - x
+        ydir = self.goal_loc[1] - y
+        new_dir = vec2(xdir, ydir)
+        self.direction = new_dir
+        return new_dir #used for unittest
 
+
+
+
+
+
+
+
+    def move(self, collideable_objects):
         self.rect.x += self.direction.x * self.speed
         x_obj_hit = self.check_collision(collideable_objects, "horizontal")
-        # if isinstance(x_obj_hit, crate.Crate):
-        #     if self.can_set_bomb:
-        #         self.state = "bomb"
-
-
-        # vertical
-        if self.rect.y > goal_y:
-            self.direction = pygame.math.Vector2(0, -1)
-        elif self.rect.y < goal_y:
-            self.direction = pygame.math.Vector2(0, 1)
 
         self.rect.y += self.direction.y * self.speed
         y_obj_hit = self.check_collision(collideable_objects, "vertical")
@@ -138,7 +136,6 @@ class Main_enemy_entity(Main_mob_entity):
         # if isinstance(y_obj_hit, crate.Crate):
         #     if self.can_set_bomb:
         #         self.state = "bomb"
-
 
 
 
@@ -154,23 +151,23 @@ class Main_enemy_entity(Main_mob_entity):
 
     def search_for_crate(self, crates_group):
 
-    # pos = pygame.math.Vector2(self.x, self.y)
-    # enemy = min([e for e in enemies], key=lambda e: pos.distance_to(pygame.math.Vector2(e.x, e.y)))
+    # pos = vec2(self.x, self.y)
+    # enemy = min([e for e in enemies], key=lambda e: pos.distance_to(vec2(e.x, e.y)))
 
         closest_crate_loc = 10000
-        closest_crate_loc_rect = pygame.math.Vector2(0, 0)
-        self_loc = pygame.math.Vector2(self.rect.x, self.rect.y)
+        closest_crate_loc_rect = vec2(0, 0)
+        self_loc = vec2(self.rect.x, self.rect.y)
         closest_crate = 0
 
         for crate in crates_group:
-            crate_loc = pygame.math.Vector2(crate.rect.x, crate.rect.y)
+            crate_loc = vec2(crate.rect.x, crate.rect.y)
             if crate_loc.distance_to(self_loc) < closest_crate_loc:
                 closest_crate_loc = crate_loc.distance_to(self_loc)
                 closest_crate_loc_rect = crate.rect
                 closest_crate = crate
 
         result_loc = (closest_crate_loc_rect.x // BLOCK_SIZE, closest_crate_loc_rect.y // BLOCK_SIZE)
-        closest_crate.highlight()
+        # closest_crate.highlight()
         print("result:", result_loc)
         if self.rect.x > closest_crate_loc_rect.x:#right
             print(((closest_crate_loc_rect.x // BLOCK_SIZE) + 1, (closest_crate_loc_rect.y // BLOCK_SIZE)))
@@ -199,4 +196,4 @@ class Main_enemy_entity(Main_mob_entity):
 
         dirs = [(0, 1), (0, -1), (-1, 0), (1, 0)]
         r = random.randint(0, 3)
-        return pygame.math.Vector2(dirs[r])
+        return vec2(dirs[r])
