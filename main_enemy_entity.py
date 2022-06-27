@@ -1,6 +1,6 @@
 from constants import *
 from main_mob_entity import *
-import random, bomb
+import random, bomb, math
 vec2 = pygame.math.Vector2
 
 class Main_enemy_entity(Main_mob_entity):
@@ -31,7 +31,7 @@ class Main_enemy_entity(Main_mob_entity):
             self.can_set_bomb = True
             # self.state = "search"
 
-        cap_str = "self.loc" + str((self.rect.x // BLOCK_SIZE, self.rect.y // BLOCK_SIZE)) + "self.goal_loc:" + str((self.goal_loc[0], self.goal_loc[1])) +  self.state
+        cap_str = "self.loc" + str((self.rect.x // BLOCK_SIZE, self.rect.y // BLOCK_SIZE)) + "self.goal_loc:" + str((self.goal_loc[0] // BLOCK_SIZE, self.goal_loc[1] // BLOCK_SIZE)) +  self.state
         pygame.display.set_caption(cap_str)
 
         crates_group = groups_manager.get_group("crates_group")
@@ -104,7 +104,6 @@ class Main_enemy_entity(Main_mob_entity):
         goal_y = goal[1] * BLOCK_SIZE
         x, y = self.get_coords()
         # ARRIVED AT LOCATION
-        print(f"goal_x:{goal_x} goal_y:{goal_y} x:{x} y:{y}")
         if x == goal_x and y == goal_y:
             if self.path:
                 self.path.pop(0)
@@ -151,39 +150,32 @@ class Main_enemy_entity(Main_mob_entity):
 
 
 
+
     def search_for_crate(self, crates_group):
-
-    # pos = vec2(self.x, self.y)
-    # enemy = min([e for e in enemies], key=lambda e: pos.distance_to(vec2(e.x, e.y)))
-
-        closest_crate_loc = 10000
-        closest_crate_loc_rect = vec2(0, 0)
-        self_loc = vec2(self.rect.x, self.rect.y)
-        closest_crate = 0
+        closest_crate_distance = ((ROWS - 1) * BLOCK_SIZE) + ((COLS - 1) * BLOCK_SIZE) ** 2
+        closest_rect = 0
 
         for crate in crates_group:
-            crate_loc = vec2(crate.rect.x, crate.rect.y)
-            if crate_loc.distance_to(self_loc) < closest_crate_loc:
-                closest_crate_loc = crate_loc.distance_to(self_loc)
-                closest_crate_loc_rect = crate.rect
-                closest_crate = crate
+            diff_x = self.rect.x - crate.rect.x
+            diff_y = self.rect.y - crate.rect.y
+            distance = diff_x + diff_y ** 2
 
-        result_loc = (closest_crate_loc_rect.x // BLOCK_SIZE, closest_crate_loc_rect.y // BLOCK_SIZE)
-        # closest_crate.highlight()
-        print("result:", result_loc)
-        if self.rect.x > closest_crate_loc_rect.x:#right
-            print(((closest_crate_loc_rect.x // BLOCK_SIZE) + 1, (closest_crate_loc_rect.y // BLOCK_SIZE)))
-            return ((closest_crate_loc_rect.x // BLOCK_SIZE) + 1, (closest_crate_loc_rect.y // BLOCK_SIZE))
-        if self.rect.x < closest_crate_loc_rect.x:#left
-            print(((closest_crate_loc_rect.x // BLOCK_SIZE) - 1, (closest_crate_loc_rect.y // BLOCK_SIZE)))
-            return ((closest_crate_loc_rect.x // BLOCK_SIZE) - 1, (closest_crate_loc_rect.y // BLOCK_SIZE))
-        if self.rect.y > closest_crate_loc_rect.y:#down
-            print(((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) + 1))
-            return ((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) + 1)
-        if self.rect.y < closest_crate_loc_rect.y:#up
-            print(((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) - 1))
-            return ((closest_crate_loc_rect.x // BLOCK_SIZE), (closest_crate_loc_rect.y // BLOCK_SIZE) - 1)
+            if distance < closest_crate_distance:
+                closest_crate_distance = distance
+                closest_crate = crate.rect
 
+        loc_to_return = vec2(0, 0)
+        cc = closest_crate
+        if self.rect.x > cc.x: #right
+            loc_to_return = vec2(cc.x + BLOCK_SIZE, cc.y)
+        if self.rect.x < cc.x: #left
+            loc_to_return = vec2(cc.x - BLOCK_SIZE, cc.y)
+        if self.rect.y < cc.y: #up
+            loc_to_return = vec2(cc.x, cc.y - BLOCK_SIZE)
+        if self.rect.y > cc.y: #down
+            loc_to_return = vec2(cc.x, cc.y + BLOCK_SIZE)
+
+        return vec2(loc_to_return.x, loc_to_return.y)
 
 
 
