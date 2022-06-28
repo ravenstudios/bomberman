@@ -4,7 +4,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-import main_enemy_entity, crate
+import main_enemy_entity, crate, border_block
 from constants import BLOCK_SIZE
 
 
@@ -28,13 +28,24 @@ class Test_main_enemy_entity(unittest.TestCase):
 
 
     def test_find_path(self):
-        self.test_obj = main_enemy_entity.Main_enemy_entity(9, 9, 1)
+        self.maxDiff = None
+        # # simple tests
+        self.test_obj = main_enemy_entity.Main_enemy_entity(5, 5, 1)
         self.test_group.empty()
-        self.test_group.add(self.test_obj)
-        self.assertIsInstance(self.test_obj.find_path(self.test_group), list, "Is not instance of \"list\"")
-        self.test_obj = main_enemy_entity.Main_enemy_entity(0, 0, 1)
-        self.assertIsInstance(self.test_obj.find_path(self.test_group), list, "Is not instance of \"list\"")
-        self.assertTrue(len(self.test_obj.find_path(self.test_group)) > 0, "Returned list length is not > 0")
+        self.test_group.add(border_block.Border_block(1, 1, 0))
+        self.test_group.add(border_block.Border_block(2, 2, 0))
+
+        # self.assertIsInstance(self.test_obj.find_path((5, 0), self.test_group), list, "Not an instance of type list")
+        # self.assertTrue(len(self.test_obj.find_path((5, 0), self.test_group)) > 0, "Returned list len is not > 0")
+
+        # movment
+        self.test_obj = main_enemy_entity.Main_enemy_entity(5, 5, 1)
+        self.assertEqual(self.test_obj.find_path((5, 0), self.test_group), [(5, 4), (5, 4), (5, 3), (5, 2), (5, 1), (5, 0)])
+        # advanced test
+        # self.test_obj = main_enemy_entity.Main_enemy_entity(0, 0, 1)
+        # self.test_group.empty()
+        # self.test_group.add(border_block.Border_block(1, 1, 0))
+        # self.test_group.add(border_block.Border_block(2, 2, 0))
 
 
     def test_move_to_location(self):
@@ -66,7 +77,7 @@ class Test_main_enemy_entity(unittest.TestCase):
 
 
 
-        # tests to make sure enemy approaches from the opposite side
+        # tests to make sure enemy approaches from the correct side
         self.test_obj = main_enemy_entity.Main_enemy_entity(5, 5, 1)
         # right
         self.test_group.empty()

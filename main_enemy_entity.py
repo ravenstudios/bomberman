@@ -71,32 +71,62 @@ class Main_enemy_entity(Main_mob_entity):
 
 
 
-    def find_path(self, collideable_objects):
-
-        visited_places = []
+    def find_path(self, goal, collideable_objects):
         queue = []
-        queue.insert(0, self.get_coords())
+        visited_locations = []
+        starting_place ={
 
+                "loc": self.get_grid_coords(),
+                "distance": 0,
+                "parent_location": self.get_grid_coords()
+                }
+        queue.insert(0, starting_place)
+
+        popped_locations = []
         while queue:
-            current = queue.pop(0)
-            # print(f"current: {current} goal_loc:{self.goal_loc}")
-            visited_places.append(current)
-            if current == self.goal_loc:
-                return visited_places
 
-            dirs = [vec2(0,-BLOCK_SIZE), vec2(BLOCK_SIZE,0), vec2(0,BLOCK_SIZE), vec2(-BLOCK_SIZE,0)]
+            queue.sort(key = lambda x: x["distance"])
+            popped = queue.pop(0)
+            # print(f"popped:{popped}")
+            loc, distance, parent_location = popped.values()
+            popped_values = []
+            popped_values.append(popped)
+            popped_locations.append(loc)
 
+            # print(f"cords:{x, y} distance:{distance} parent_location{parent_location}")
+            dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)]
             for d in dirs:
-                x = current[0] + d.x
-                y = current[1] + d.y
-                # print(f"x:{x} y:{y}")
-                if x >= 0 and y >= 0 and x <= COLS * BLOCK_SIZE and y <= ROWS * BLOCK_SIZE:
-                    loc = (x, y)
+                new_location = (loc[0] + d[0], loc[1] + d[1])
 
-                if not self.is_obj_at_loc_collideable(loc, collideable_objects) and loc not in visited_places:
-                    queue.insert(0, loc)
-                    if loc == self.goal_loc:
-                        return visited_places
+
+                new_place = {
+                    "loc": new_location,
+                    "distance": distance + 1,
+                    "parent_location": loc
+                }
+
+
+                if new_location == goal:
+                    queue.insert(0,
+                    {"loc": new_location,
+                    "distance": 0,
+                    "parent_location": loc})
+                    print(popped_values)
+                    return popped_locations
+
+                x, y = new_location
+                if x > 0 and x < COLS and y > 0 and y < ROWS and new_location not in popped_locations:
+
+                    # for q in queue:
+                    #     if q["loc"] == new_location:
+                    #         q["distance"] = distance + 1
+                    #         q["parent_location"] = loc
+                    # else:
+                        queue.insert(0, new_place)
+
+
+
+                    # queue.sort(key = lambda x: x["distance"])
 
 
     def move_to_location(self, goal, collideable_objects):
