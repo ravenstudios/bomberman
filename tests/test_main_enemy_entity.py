@@ -19,7 +19,6 @@ class Test_main_enemy_entity(unittest.TestCase):
     def test_is_obj_at_loc_collideable(self):
         self.test_obj = main_enemy_entity.Main_enemy_entity(2, 2, 1)
         self.test_group.add(self.test_obj)
-        print(self.test_obj.is_obj_at_loc_collideable((0, 0), self.test_group))
         self.assertEqual(self.test_obj.is_obj_at_loc_collideable((0, 0), self.test_group), False, "Returned True that object collieded when should return False")
         self.test_obj = main_enemy_entity.Main_enemy_entity(0, 0, 1)
         self.test_group.empty()
@@ -39,13 +38,23 @@ class Test_main_enemy_entity(unittest.TestCase):
         # self.assertTrue(len(self.test_obj.find_path((5, 0), self.test_group)) > 0, "Returned list len is not > 0")
 
         # movment
+        # self.test_obj = main_enemy_entity.Main_enemy_entity(5, 5, 1)
+        # self.assertEqual(self.test_obj.find_path((5, 0), self.test_group), [(5, 5), (5, 4), (5, 3), (5, 2), (5, 1), (5, 0)])
+        # self.test_obj = main_enemy_entity.Main_enemy_entity(9, 9, 1)
+        # self.assertEqual(self.test_obj.find_path((1, 1), self.test_group), [(9, 9), (8, 8), (7, 7), (6, 6), (5, 5), (4, 4), (3, 3), (2, 2), (1, 1)])
+        test_list = []
+        for i in range(1, 5):
+            test_list.append((5 - i, 1))
+
         self.test_obj = main_enemy_entity.Main_enemy_entity(5, 5, 1)
-        self.assertEqual(self.test_obj.find_path((5, 0), self.test_group), [(5, 4), (5, 4), (5, 3), (5, 2), (5, 1), (5, 0)])
+        self.assertEqual(self.test_obj.find_path((1, 5), self.test_group), test_list)
+        # self.assertEqual(self.test_obj.find_path((1, 1), self.test_group), [(9, 9), (8, 8), (7, 7), (6, 6), (5, 5), (4, 4), (3, 3), (2, 2), (1, 1)])
         # advanced test
         # self.test_obj = main_enemy_entity.Main_enemy_entity(0, 0, 1)
         # self.test_group.empty()
         # self.test_group.add(border_block.Border_block(1, 1, 0))
         # self.test_group.add(border_block.Border_block(2, 2, 0))
+
 
 
     def test_move_to_location(self):

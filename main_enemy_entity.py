@@ -73,60 +73,61 @@ class Main_enemy_entity(Main_mob_entity):
 
     def find_path(self, goal, collideable_objects):
         queue = []
-        visited_locations = []
-        starting_place ={
-
-                "loc": self.get_grid_coords(),
-                "distance": 0,
-                "parent_location": self.get_grid_coords()
-                }
-        queue.insert(0, starting_place)
-
         popped_locations = []
+
+        starting_place =(self.get_grid_coords(), 0)
+
+
+        queue.append(starting_place)
+
+        def is_loc_in_list(loc, popped_locations):
+            for popped_loc in popped_locations:
+                if popped_loc[0] == loc:
+                    return True
+            return False
+
         while queue:
-
-            queue.sort(key = lambda x: x["distance"])
+            queue.sort(key = lambda x: x[1])
             popped = queue.pop(0)
-            # print(f"popped:{popped}")
-            loc, distance, parent_location = popped.values()
-            popped_values = []
-            popped_values.append(popped)
-            popped_locations.append(loc)
+            # print(popped)
+            popped_locations.append(popped)
 
-            # print(f"cords:{x, y} distance:{distance} parent_location{parent_location}")
+            loc, distance = popped
             dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)]
             for d in dirs:
                 new_location = (loc[0] + d[0], loc[1] + d[1])
 
-
-                new_place = {
-                    "loc": new_location,
-                    "distance": distance + 1,
-                    "parent_location": loc
-                }
-
-
+                # FOUND GOAL
                 if new_location == goal:
-                    queue.insert(0,
-                    {"loc": new_location,
-                    "distance": 0,
-                    "parent_location": loc})
-                    print(popped_values)
-                    return popped_locations
+                    popped_locations.append((new_location, 0))
 
+                    result = []
+                    result.append(popped_locations[0][0])
+                    popped_locations.pop(0)
+
+                    index = 1
+                    for pl in popped_locations:
+
+                        if pl[1] == 0:
+                            result.append(pl[0])
+                            print(result)
+                            return result
+                        if pl[1] == index:
+                            result.append(pl[0])
+                            index += 1
+
+                # ADD TO QUEUE
                 x, y = new_location
-                if x > 0 and x < COLS and y > 0 and y < ROWS and new_location not in popped_locations:
 
-                    # for q in queue:
-                    #     if q["loc"] == new_location:
-                    #         q["distance"] = distance + 1
-                    #         q["parent_location"] = loc
-                    # else:
-                        queue.insert(0, new_place)
+                if (x > 0 and
+                    x < COLS and
+                    y > 0 and
+                    y < ROWS and
+                    # not in popped list
+                    not is_loc_in_list((new_location), popped_locations)):
+                        # check to see if its in the queue and if so update distance and parent
+                        queue.append((new_location, distance + 1))
 
-
-
-                    # queue.sort(key = lambda x: x["distance"])
 
 
     def move_to_location(self, goal, collideable_objects):
